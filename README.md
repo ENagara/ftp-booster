@@ -1,7 +1,6 @@
 # ftp-booster
-====
 
-Overview
+## Overview
 FTP向上のための記録ツール
 
 ## Description
