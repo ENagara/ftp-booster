@@ -1,45 +1,47 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 
-//コンポーネント
-import RouteRelatedBottomNavigation from './src/components/RouteRelatedBottomNavigation';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
 
-// Route関連
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+const Tab = createBottomTabNavigator();
 
-// 共通スタイル読み込み
-import './App.css';
-
-export const Feed = () => <div>welcome Feed</div>;
-export const Graph = () => <div>Graph</div>;
-export const Columns = () => <div>Columns</div>;
-export const Settings = () => <div>Settings</div>;
-export const NotFound = () => <div>NotFound</div>;
-
+export const Feed = () => <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><Text>welcome Feed</Text></View>;
+export const Graph = () => <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><Text>Graph</Text></View>;
+export const Columns = () => <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><Text>Columns</Text></View>;
+export const Settings = () => <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><Text>Settings</Text></View>;
 
 export default function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Switch>
-          <Route exact path="/" component={Feed} />
-          <Route exact path="/graph" component={Graph} />
-          <Route exact path="/columns" component={Columns} />
-          <Route exact path="/settings" component={Settings} />
-          <Route component={NotFound} />
-        </Switch>
-        <RouteRelatedBottomNavigation />
-      </BrowserRouter>
-    </div>
+    <NavigationContainer>
+      <Tab.Navigator
+        initialRouteName="Feed"
+        tabBarOptions={{
+          activeTintColor: '#de8f18',
+        }}>
+        <Tab.Screen name="Feed" component={Feed} options={{
+          tabBarLabel: 'Feed',
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name="home" color={color} size={size} />),
+        }} />
+        <Tab.Screen name="Graph" component={Graph} options={{
+          tabBarLabel: 'Graph',
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name="linechart" color={color} size={size} />),
+        }} />
+        <Tab.Screen name="Columns" component={Columns} options={{
+          tabBarLabel: 'Columns',
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name="book" color={color} size={size} />),
+        }} />
+        <Tab.Screen name="Settings" component={Settings} options={{
+          tabBarLabel: 'Settings',
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name="setting" color={color} size={size} />),
+        }} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
