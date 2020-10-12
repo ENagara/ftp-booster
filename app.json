@@ -4,9 +4,9 @@
     "slug": "ftp-booster",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "../assets/icon.png",
+    "icon": "./assets/icon.png",
     "splash": {
-      "image": "../assets/splash.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,10 +17,16 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.enagara.ftpbooster",
+      "buildNumber": "1.0.0"
     },
     "web": {
-      "favicon": "../assets/favicon.png"
+      "favicon": "./assets/favicon.png"
+    },
+    "android": {
+      "package": "com.enagara.ftpbooster",
+      "versionCode": 1
     }
   }
 }
