@@ -18,14 +18,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.enagara.ftpbooster",
+      "bundleIdentifier": "com.nei.ftpbooster",
       "buildNumber": "1.0.0"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "android": {
-      "package": "com.enagara.ftpbooster",
+      "package": "com.nei.ftpbooster",
       "versionCode": 1
     }
   }
