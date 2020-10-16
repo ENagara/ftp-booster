@@ -10,9 +10,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import Colors from '../configs/Colors';
 import { BottomTabParamList, FeedParamList, GraphParamList, SettingsParamList } from '../configs/Types';
 
-export const FeedScreen = () => <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><Text>Feed</Text></View>;
-export const GraphScreen = () => <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><Text>Graph</Text></View>;
-export const SettingsScreen = () => <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><Text>Settings</Text></View>;
+// 画面
+import FeedScreen from '../screens/FeedScreen';
+import GraphScreen from '../screens/GraphScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 
 const DISP_FEED = 'フィード';
 const DISP_GRAPH = 'グラフ';
@@ -20,7 +21,7 @@ const DISP_SETTINGS = '設定';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
-class BottomNavigation extends Component {
+export default class BottomNavigation extends Component {
   render() {
     return (
       <NavigationContainer>
@@ -96,5 +97,3 @@ const ScreenOptions = (title: string) => {
     headerStyle: { backgroundColor: Colors.tint }
   }
 }
-
-export default BottomNavigation;
