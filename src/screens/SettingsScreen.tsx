@@ -1,20 +1,10 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import DialogExample from '../components/DialogExample';
 
 export default class SettingsScreen extends Component {
     render() {
         return (
-            <View style={styles.container}>
-                <Text>Settings</Text>
-            </View>
+            <DialogExample></DialogExample>
         )
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
-});
