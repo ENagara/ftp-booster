@@ -31,18 +31,15 @@ export default class BottomNavigation extends Component {
             activeTintColor: Colors.tint,
           }}>
           <Tab.Screen name='Feed' component={FeedNavigator} options={{
-            tabBarIcon: ({ color, size }) => (
-              <AntDesign name='home' color={color} size={size} />),
+            tabBarIcon: getTabNavigatorIcon('home'),
             tabBarLabel: DISP_FEED,
           }} />
           <Tab.Screen name='Graph' component={GraphNavigator} options={{
-            tabBarIcon: ({ color, size }) => (
-              <AntDesign name='linechart' color={color} size={size} />),
+            tabBarIcon: getTabNavigatorIcon('linechart'),
             tabBarLabel: DISP_GRAPH,
           }} />
           <Tab.Screen name='Settings' component={SettingsNavigator} options={{
-            tabBarIcon: ({ color, size }) => (
-              <AntDesign name='setting' color={color} size={size} />),
+            tabBarIcon: getTabNavigatorIcon('setting'),
             tabBarLabel: DISP_SETTINGS,
           }} />
         </Tab.Navigator>
@@ -51,6 +48,13 @@ export default class BottomNavigation extends Component {
   }
 }
 
+/** AntDesignアイコン読み込み */
+const getTabNavigatorIcon = (name: string) => ({ color, size }: {
+  color: string;
+  size: number;
+}) => <AntDesign name={name} color={color} size={size} />;
+
+/** ------- スタックに積むスクリーン設定 ------- */
 const FeedStack = createStackNavigator<FeedParamList>();
 const FeedNavigator = () => {
   return (
