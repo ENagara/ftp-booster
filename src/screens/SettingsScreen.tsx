@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
-import DialogExample from '../components/DialogExample';
+import { View } from 'react-native';
+import ButtonDialog from '../components/ButtonDialog';
 
 export default class SettingsScreen extends Component {
     render() {
         return (
-            <DialogExample></DialogExample>
+            <ButtonDialog
+                buttonName='ログアウト'
+                dialogTitle='ログアウトしますか？'
+                dialogOkButtonName='ログアウト'>
+            </ButtonDialog>
+
         )
     }
 }

@@ -1,9 +1,15 @@
-import * as React from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Colors, Button } from 'react-native-paper';
 import SimpleDialog from './SimpleDialog';
 
-const DialogExample = () => {
+type Props = {
+    buttonName: string;
+    dialogTitle: string;
+    dialogOkButtonName: string;
+};
+
+const ButtonDialog: React.FC<Props> = ({ buttonName, dialogTitle, dialogOkButtonName }: Props) => {
     const [visible, setVisible] = React.useState<boolean>();
 
     const _toggleDialog = () => setVisible(!visible);
@@ -22,19 +28,17 @@ const DialogExample = () => {
                 onPress={() => _toggleDialog()}
                 style={styles.button}
             >
-                ログアウト
+                {buttonName}
             </Button>
             <SimpleDialog
-                title={'ログアウトしますか？'}
-                okButtonName={'ログアウト'}
+                title={dialogTitle}
+                okButtonName={dialogOkButtonName}
                 visible={_getVisible()}
                 action={setAction}
             />
         </View>
     );
 };
-
-DialogExample.title = 'Dialog';
 
 const styles = StyleSheet.create({
     container: {
@@ -47,4 +51,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default DialogExample;
+export default ButtonDialog;
