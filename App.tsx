@@ -3,7 +3,11 @@ import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import BottomNavigation from './src/components/BottomNavigation';
 import Colors from './src/configs/Colors';
 
-const theme = {
+import * as eva from '@eva-design/eva';
+import { ApplicationProvider } from '@ui-kitten/components';
+import KittenTheme  from './src/configs/KittenTheme'
+
+const PaperTheme = {
   ...DefaultTheme,
   roundness: 2,
   colors: {
@@ -15,8 +19,10 @@ const theme = {
 
 export default function App() {
   return (
-    <PaperProvider theme={theme}>
-      <BottomNavigation></BottomNavigation>
-    </PaperProvider>
+    <ApplicationProvider {...eva} theme={{ ...eva.light, ...KittenTheme }}>
+      <PaperProvider theme={PaperTheme}>
+        <BottomNavigation></BottomNavigation>
+      </PaperProvider>
+    </ApplicationProvider>
   );
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Colors, Button } from 'react-native-paper';
+import { Button } from '@ui-kitten/components';
 import SimpleDialog from './SimpleDialog';
 
 type Props = {
@@ -12,20 +12,19 @@ type Props = {
 const ButtonDialog: React.FC<Props> = ({ buttonName, dialogTitle, dialogOkButtonName }: Props) => {
     const [visible, setVisible] = React.useState<boolean>();
 
-    const _toggleDialog = () => setVisible(!visible);
+    const toggleDialog = () => setVisible(!visible);
 
-    const _getVisible = () => !!visible;
+    const getVisible = () => !!visible;
 
     const setAction = (flug: boolean) => {
-        _toggleDialog();
+        toggleDialog();
         console.log(flug);
     }
 
     return (
         <View style={[styles.container]}>
             <Button
-                mode='outlined'
-                onPress={() => _toggleDialog()}
+                onPress={toggleDialog}
                 style={styles.button}
             >
                 {buttonName}
@@ -33,7 +32,7 @@ const ButtonDialog: React.FC<Props> = ({ buttonName, dialogTitle, dialogOkButton
             <SimpleDialog
                 title={dialogTitle}
                 okButtonName={dialogOkButtonName}
-                visible={_getVisible()}
+                visible={getVisible()}
                 action={setAction}
             />
         </View>
@@ -42,8 +41,6 @@ const ButtonDialog: React.FC<Props> = ({ buttonName, dialogTitle, dialogOkButton
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: Colors.grey200,
         padding: 12,
     },
     button: {
