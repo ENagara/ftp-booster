@@ -5,6 +5,8 @@ export default {
   text: '#000',
   background: '#fff',
   tint: tintColor,
-  tabIconDefault: '#ccc',
-  tabIconSelected: tintColor,
+  iconSmile: tintColor,
+  iconMeh: 'limegreen',
+  iconFrown: 'navy',
+  iconTopic: 'gold'
 };

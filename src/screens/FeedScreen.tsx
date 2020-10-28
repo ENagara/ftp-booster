@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import EntryDialog from '../components/EntryDialog';
+import FeedComponent from '../components/FeedComponent';
 
 export default class FeedScreen extends Component {
-
     render() {
         return (
             <View style={styles.container}>
-                <Text>Feed</Text>
+                <FeedComponent></FeedComponent>
                 <EntryDialog></EntryDialog>
             </View>
         )
@@ -16,8 +16,6 @@ export default class FeedScreen extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
+        flex: 1
     },
 });

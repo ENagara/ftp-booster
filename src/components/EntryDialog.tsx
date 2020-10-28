@@ -8,7 +8,6 @@ import PlatformDatepicker from './PlatformDatepicker';
 
 /** コンディションのオプション */
 const conditionOption = [
-    { text: '最高' },
     { text: '良好' },
     { text: '普通' },
     { text: '悪い' },
