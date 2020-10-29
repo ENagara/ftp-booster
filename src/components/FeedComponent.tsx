@@ -1,6 +1,6 @@
 import React from 'react';
 import { List, Layout, Text } from '@ui-kitten/components';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import Colors from '../configs/Colors';
 
@@ -164,7 +164,7 @@ const FeedComponent = () => {
     );
 
     return (
-        <Layout>
+        <ScrollView>
             <List
                 data={data}
                 renderItem={renderItem}
@@ -175,7 +175,7 @@ const FeedComponent = () => {
                 visible={getDialogVisible()}
                 action={deleteAction}
             />
-        </Layout>
+        </ScrollView>
     );
 };
 
