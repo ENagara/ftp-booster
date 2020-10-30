@@ -8,3 +8,5 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 /debug.log
+/web-build
+/.firebase

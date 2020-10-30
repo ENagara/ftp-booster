@@ -26,3 +26,12 @@ export type SettingsParamList = {
   SettingsScreen: undefined;
 };
 
+export type FtpDataParam = {
+  no: number,
+  type: 'ftp' | 'topic',
+  date: firebase.firestore.Timestamp,
+  ftp?: number,
+  weight?: number,
+  condition?: '良好' | '普通' | '悪い',
+  message?: string,
+}

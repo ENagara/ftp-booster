@@ -117,14 +117,14 @@ const EntryContainer = ({ action }: EntryContainerProp) => {
                     appearance='outline'
                 >
                     キャンセル
-                            </Button>
+                </Button>
                 <Button
                     onPress={() => buttonAction(true)}
                     appearance='filled'
                     style={styles.leftMargin}
                 >
                     登録
-                        </Button>
+                </Button>
             </Dialog.Actions>
         </>
     );
