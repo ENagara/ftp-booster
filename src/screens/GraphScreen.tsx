@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import LineChart from '../components/LineChart';
 
 export default class GraphScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text>Graph</Text>
+                <LineChart></LineChart>
             </View>
         )
     }
