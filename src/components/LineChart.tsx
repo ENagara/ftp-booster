@@ -113,7 +113,12 @@ const options = {
     maintainAspectRatio: false
 }
 
-export default function LineChart() {
+type Props = {
+    selectedPeriodIndex: number;
+    selectedDataOptinoIndex: number;
+}
+
+const LineChart: React.FC<Props>  = ({ selectedPeriodIndex, selectedDataOptinoIndex}:Props) => {
     const js = `
     var data = {
         datasets: [
@@ -215,7 +220,7 @@ export default function LineChart() {
 
     if (Platform.OS == 'web') {
         return (
-            <div style={{ height: '80vh', width: '90vw' }}>
+            <div style={{ height: '60vh', width: '90vw' }}>
                 <Line data={data} options={options} />
             </div>
         );
@@ -236,3 +241,5 @@ export default function LineChart() {
         );
     }
 }
+
+export default LineChart;
