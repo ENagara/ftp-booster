@@ -7,9 +7,10 @@ type Props = {
     buttonName: string;
     dialogTitle: string;
     dialogOkButtonName: string;
+    action: (flug: boolean) => void;
 };
 
-const ButtonDialog: React.FC<Props> = ({ buttonName, dialogTitle, dialogOkButtonName }: Props) => {
+const ButtonDialog: React.FC<Props> = ({ buttonName, dialogTitle, dialogOkButtonName, action}: Props) => {
     const [visible, setVisible] = React.useState<boolean>();
 
     const toggleDialog = () => setVisible(!visible);
@@ -18,7 +19,7 @@ const ButtonDialog: React.FC<Props> = ({ buttonName, dialogTitle, dialogOkButton
 
     const setAction = (flug: boolean) => {
         toggleDialog();
-        console.log(flug);
+        action(flug);
     }
 
     return (

@@ -1,11 +1,18 @@
 import React from 'react';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
-import BottomNavigation from './src/components/BottomNavigation';
-import Colors from './src/configs/Colors';
-
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider } from '@ui-kitten/components';
-import KittenTheme  from './src/configs/KittenTheme'
+
+/** screens */
+import LoginScreen from './src/screens/LoginScreen';
+
+/** components */
+import BottomNavigation from './src/components/BottomNavigation';
+
+/** configs */
+import Colors from './src/configs/Colors';
+import KittenTheme from './src/configs/KittenTheme';
+import { auth } from './src/configs/Firebase';
 
 const PaperTheme = {
   ...DefaultTheme,
@@ -17,12 +24,34 @@ const PaperTheme = {
   },
 };
 
-export default function App() {
+const App = () => {
   return (
     <ApplicationProvider {...eva} theme={{ ...eva.light, ...KittenTheme }}>
       <PaperProvider theme={PaperTheme}>
-        <BottomNavigation></BottomNavigation>
+        <RenderApp></RenderApp>
       </PaperProvider>
     </ApplicationProvider>
   );
 }
+
+/**
+ * アプリ表示
+ * ログイン状態により、ログイン画面・メインコンテンツを切り替える
+ */
+const RenderApp = () => {
+  const [logging, setLogging] = React.useState(false);
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      setLogging(true);
+    } else {
+      setLogging(false);
+    }
+  });
+  return (
+    logging
+      ? <BottomNavigation></BottomNavigation>
+      : <LoginScreen></LoginScreen>
+  );
+}
+
+export default App;

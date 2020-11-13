@@ -1,5 +1,5 @@
 import { FtpDataParam } from '../configs/Types';
-import dbh from '../configs/Firebase';
+import { dbh } from '../configs/Firebase';
 
 /** データを取得 */
 export const GetFtpDataList = async (): Promise<FtpDataParam[]> => {

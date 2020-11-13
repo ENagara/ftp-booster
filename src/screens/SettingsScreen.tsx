@@ -1,16 +1,29 @@
-import React, { Component } from 'react';
-import { View } from 'react-native';
+import React from 'react';
 import ButtonDialog from '../components/ButtonDialog';
+import { auth } from '../configs/Firebase';
 
-export default class SettingsScreen extends Component {
-    render() {
-        return (
-            <ButtonDialog
-                buttonName='ログアウト'
-                dialogTitle='ログアウトしますか？'
-                dialogOkButtonName='ログアウト'>
-            </ButtonDialog>
-
-        )
+const SettingsScreen = () => {
+    const action = (flug: boolean) => {
+        // ログアウト処理
+        if (flug) {
+            auth.signOut()
+                .then(() => {
+                    console.log('ログアウトしました');
+                })
+                .catch(({ message }) => {
+                    console.log(message);
+                });
+        }
     }
+
+    return (
+        <ButtonDialog
+            buttonName='ログアウト'
+            dialogTitle='ログアウトしますか？'
+            dialogOkButtonName='ログアウト'
+            action={action}
+        >
+        </ButtonDialog>
+    )
 }
+export default SettingsScreen;
