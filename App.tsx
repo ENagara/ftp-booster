@@ -1,7 +1,8 @@
 import React from 'react';
+import { StyleSheet,View } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { ApplicationProvider, Spinner } from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
-import { ApplicationProvider } from '@ui-kitten/components';
 
 /** screens */
 import LoginScreen from './src/screens/LoginScreen';
@@ -39,19 +40,43 @@ const App = () => {
  * ログイン状態により、ログイン画面・メインコンテンツを切り替える
  */
 const RenderApp = () => {
-  const [logging, setLogging] = React.useState(false);
+  const [loggingState, setLoggingState] = React.useState<LogingState>(LogingState.Init);
   auth.onAuthStateChanged((user) => {
-    if (user) {
-      setLogging(true);
+    if (user === null) {
+      setLoggingState(LogingState.UnLogging);
     } else {
-      setLogging(false);
+      setLoggingState(LogingState.Logging);
     }
   });
-  return (
-    logging
-      ? <BottomNavigation></BottomNavigation>
-      : <LoginScreen></LoginScreen>
-  );
+  switch (loggingState){
+    // 読み込み中
+    case LogingState.Init:
+      return (
+        <View style={styles.center}>
+          <Spinner size='giant' />
+        </View>
+      );
+    // ログイン中
+    case LogingState.Logging:
+      return (<BottomNavigation></BottomNavigation>);
+    // 未ログイン
+    case LogingState.UnLogging:
+      return (<LoginScreen></LoginScreen>);
+  }
 }
 
+const LogingState = {
+  Init: 'init',
+  Logging: 'logging',
+  UnLogging: 'unLogging'
+ } as const;
+type LogingState = typeof LogingState[keyof typeof LogingState];
+
+const styles = StyleSheet.create({
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 export default App;

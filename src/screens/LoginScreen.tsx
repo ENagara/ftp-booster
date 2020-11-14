@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, TextInput, Button, Divider } from 'react-native-paper';
+import WaitDialog from '../components/WaitDialog';
 import { auth } from '../configs/Firebase';
 
 const LoginScreen = () => {
@@ -8,11 +9,15 @@ const LoginScreen = () => {
     const [login, setLogin] = React.useState(true);
     const switchLogin = () => setLogin(!login);
 
-    return (
-        login
-            ? <LoginForm switchLogin={switchLogin}></LoginForm>
-            : <CreateAccountForm switchLogin={switchLogin}></CreateAccountForm>
-    )
+    if (login) {
+        return (
+            <LoginForm switchLogin={switchLogin}></LoginForm>
+        );
+    } else {
+        return (
+            <CreateAccountForm switchLogin={switchLogin}></CreateAccountForm>
+        );
+    }
 }
 
 type LoginFormProps = {
@@ -22,12 +27,20 @@ const LoginForm = ({ switchLogin }: LoginFormProps) => {
     const [mail, setMail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
+    const [waitVisible, setWeitVisible] = React.useState(false);
+
     const login = () => {
+        // スピナー開始
+        setWeitVisible(true);
         auth.signInWithEmailAndPassword(mail, password)
             .then(() => {
                 console.log('ログイン成功');
+                // スピナーを停止
+                setWeitVisible(false);
             }).catch(({ message }) => {
+                // スピナーを停止
                 console.log(message);
+                setWeitVisible(false);
             });
     }
 
@@ -63,6 +76,7 @@ const LoginForm = ({ switchLogin }: LoginFormProps) => {
                 style={styles.contents}>
                 メールアドレスで登録
             </Button>
+            <WaitDialog visible={waitVisible}></WaitDialog>
         </View>
     )
 }
@@ -75,12 +89,20 @@ const CreateAccountForm = ({ switchLogin }: CreateAccountFormProps) => {
     const [password, setPassword] = React.useState('');
     const [passwordConfirm, setPasswordConfirm] = React.useState('');
 
+    const [waitVisible, setWeitVisible] = React.useState(false);
+
     const createUser = () => {
+        // スピナー開始
+        setWeitVisible(true);
         auth.createUserWithEmailAndPassword(mail, password)
             .then(() => {
                 console.log('ユーザの作成成功');
+                // スピナー停止
+                setWeitVisible(false);
             }).catch(({ message }) => {
                 console.log(message);
+                // スピナー停止
+                setWeitVisible(false);
             });
     }
 
@@ -125,7 +147,7 @@ const CreateAccountForm = ({ switchLogin }: CreateAccountFormProps) => {
                 style={styles.contents}>
                 戻る
             </Button>
-
+            <WaitDialog visible={waitVisible}></WaitDialog>
         </View>
     );
 }
