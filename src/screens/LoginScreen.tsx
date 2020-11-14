@@ -1,5 +1,6 @@
+import { Layout } from '@ui-kitten/components';
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import { Text, TextInput, Button, Divider } from 'react-native-paper';
 import WaitDialog from '../components/WaitDialog';
 import { auth } from '../configs/Firebase';
@@ -9,15 +10,24 @@ const LoginScreen = () => {
     const [login, setLogin] = React.useState(true);
     const switchLogin = () => setLogin(!login);
 
-    if (login) {
-        return (
-            <LoginForm switchLogin={switchLogin}></LoginForm>
-        );
-    } else {
-        return (
-            <CreateAccountForm switchLogin={switchLogin}></CreateAccountForm>
-        );
-    }
+    return (
+        <>
+            <View style={{ alignItems: 'center', paddingTop: 64 }}>
+                <Image
+                    source={require('../../assets/title.png')}
+                    style={{
+                        width: 280,
+                        height: 50,
+                    }} />
+            </View>
+            {login
+                // ログイン画面
+                ? <LoginForm switchLogin={switchLogin}></LoginForm>
+                // アカウント作成画面
+                : <CreateAccountForm switchLogin={switchLogin}></CreateAccountForm>
+            }
+        </>
+    );
 }
 
 type LoginFormProps = {

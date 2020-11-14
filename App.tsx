@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet,View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { ApplicationProvider, Spinner } from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
@@ -29,7 +29,7 @@ const App = () => {
   return (
     <ApplicationProvider {...eva} theme={{ ...eva.light, ...KittenTheme }}>
       <PaperProvider theme={PaperTheme}>
-        <RenderApp></RenderApp>
+          <RenderApp></RenderApp>
       </PaperProvider>
     </ApplicationProvider>
   );
@@ -48,7 +48,7 @@ const RenderApp = () => {
       setLoggingState(LogingState.Logging);
     }
   });
-  switch (loggingState){
+  switch (loggingState) {
     // 読み込み中
     case LogingState.Init:
       return (
@@ -69,7 +69,7 @@ const LogingState = {
   Init: 'init',
   Logging: 'logging',
   UnLogging: 'unLogging'
- } as const;
+} as const;
 type LogingState = typeof LogingState[keyof typeof LogingState];
 
 const styles = StyleSheet.create({
