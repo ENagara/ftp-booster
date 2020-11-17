@@ -9,6 +9,7 @@ import LoginScreen from './src/screens/LoginScreen';
 
 /** components */
 import BottomNavigation from './src/components/BottomNavigation';
+import ErrorBoundary from './src/components/ErrorBoundary';
 
 /** configs */
 import Colors from './src/configs/Colors';
@@ -27,11 +28,13 @@ const PaperTheme = {
 
 const App = () => {
   return (
-    <ApplicationProvider {...eva} theme={{ ...eva.light, ...KittenTheme }}>
-      <PaperProvider theme={PaperTheme}>
+    <ErrorBoundary>
+      <ApplicationProvider {...eva} theme={{ ...eva.light, ...KittenTheme }}>
+        <PaperProvider theme={PaperTheme}>
           <RenderApp></RenderApp>
-      </PaperProvider>
-    </ApplicationProvider>
+        </PaperProvider>
+      </ApplicationProvider>
+    </ErrorBoundary>
   );
 }
 

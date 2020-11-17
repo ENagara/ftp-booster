@@ -6,7 +6,8 @@
     "build:android": "expo build:android -t apk",
     "build:ios": "expo build:ios -t archive",
     "build:web": "expo build:web",
-    "deploy:web": "firebase deploy"
+    "deploy:web": "firebase deploy",
+    "web": "npm run build:web && npm run deploy:web"
   },
   "dependencies": {
     "@eva-design/eva": "^1.4.0",
