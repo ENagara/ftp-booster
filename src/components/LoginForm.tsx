@@ -12,7 +12,7 @@ const LoginForm = ({ switchLogin }: LoginFormProps) => {
     const [password, setPassword] = React.useState('');
     const [waitVisible, setWeitVisible] = React.useState(false);
     const [operationDirty, setOperationDirty] = React.useState(false);
-    const [loginError, setLoginError] = React.useState(true);
+    const [loginError, setLoginError] = React.useState(false);
     const [, setError] = React.useState();
 
     /** メールアドレスチェック */
@@ -37,6 +37,9 @@ const LoginForm = ({ switchLogin }: LoginFormProps) => {
         // スピナー開始
         setWeitVisible(true);
         auth.signInWithEmailAndPassword(email, password)
+            .then(() => {
+                setLoginError(false);
+            })
             .catch(({ message }) => {
                 if (message === 'The password is invalid or the user does not have a password.'
                     || message === 'There is no user record corresponding to this identifier. The user may have been deleted.') {

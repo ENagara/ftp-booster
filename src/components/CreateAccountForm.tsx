@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { TextInput, Button, Divider } from 'react-native-paper';
+import { TextInput, Button, Divider, HelperText } from 'react-native-paper';
 
 /** components */
 import WaitDialog from './WaitDialog';
@@ -18,9 +18,42 @@ const CreateAccountForm = ({ switchLogin }: CreateAccountFormProps) => {
     const [passwordConfirm, setPasswordConfirm] = React.useState('');
 
     const [waitVisible, setWeitVisible] = React.useState(false);
+    const [operationDirty, setOperationDirty] = React.useState(false);
     const [, setError] = React.useState();
 
+    /** ユーザ名チェック */
+    const nameRegexp = new RegExp(/^.{1,}$/);
+    const isName = () => {
+        return !nameRegexp.test(name);
+    }
+
+    /** メールアドレスチェック */
+    const eｍailRegexp = new RegExp(/^[\w\-\._]+@[\w\-\._]+\.[A-Za-z]+$/);
+    const isEｍail = () => {
+        return !eｍailRegexp.test(email);
+    }
+
+    /** パスワードチェック */
+    const passwordRegexp = new RegExp(/^.{6,}$/);
+    const isPassword = () => {
+        return !passwordRegexp.test(password);
+    }
+
+    /** パスワード確認チェック */
+    const isPasswordConfirm = () => {
+        return password !== passwordConfirm;
+    }
+
     const createUser = async () => {
+        setOperationDirty(true);
+        // エラーがある場合は処理しない
+        if (isName()
+            || isEｍail()
+            || isPassword()
+            || isPasswordConfirm()) {
+            return;
+        }
+
         let errormsg: string = '';
         // スピナー開始
         setWeitVisible(true);
@@ -121,11 +154,14 @@ const CreateAccountForm = ({ switchLogin }: CreateAccountFormProps) => {
             <Text style={styles.title}>アカウントを作成する</Text>
             <TextInput
                 label='ユーザ名'
-                placeholder='ftp'
+                placeholder='Jhon'
                 value={name}
                 onChangeText={setName}
                 style={styles.contents}
             />
+            <HelperText type="error" visible={isName() && operationDirty}>
+                ユーザ名を入力してください。
+            </HelperText>
             <TextInput
                 label='メールアドレス'
                 placeholder='ftp.booster@example.com'
@@ -133,6 +169,9 @@ const CreateAccountForm = ({ switchLogin }: CreateAccountFormProps) => {
                 onChangeText={setEmail}
                 style={styles.contents}
             />
+            <HelperText type="error" visible={isEｍail() && operationDirty}>
+                メールアドレスを入力してください。
+            </HelperText>
             <TextInput
                 label='パスワード'
                 placeholder='********'
@@ -141,6 +180,9 @@ const CreateAccountForm = ({ switchLogin }: CreateAccountFormProps) => {
                 onChangeText={setPassword}
                 style={styles.contents}
             />
+            <HelperText type="error" visible={isPassword() && operationDirty}>
+                6文字以上で入力してください。
+            </HelperText>
             <TextInput
                 label='パスワード(確認) '
                 placeholder='********'
@@ -149,6 +191,9 @@ const CreateAccountForm = ({ switchLogin }: CreateAccountFormProps) => {
                 onChangeText={setPasswordConfirm}
                 style={styles.contents}
             />
+            <HelperText type="error" visible={isPasswordConfirm() && operationDirty}>
+                パスワードが異なっています。
+            </HelperText>
             <Button
                 mode="contained"
                 onPress={() => createUser()}
@@ -172,15 +217,14 @@ const CreateAccountForm = ({ switchLogin }: CreateAccountFormProps) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16
+        padding: 16,
     },
     contents: {
         marginTop: 16,
-        marginBottom: 16,
     },
     title: {
         fontSize: 16,
-        textAlign: 'center'
+        textAlign: 'center',
     }
 });
 
