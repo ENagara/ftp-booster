@@ -1,24 +1,28 @@
 import { FtpDataParam } from '../configs/Types';
-import { dbh } from '../configs/Firebase';
+import { dbh, auth } from '../configs/Firebase';
 
-/** データを取得 */
+/** 記録した全データを取得（降順） */
 export const GetFtpDataList = async (): Promise<FtpDataParam[]> => {
-    let ftpDataListWk: FtpDataParam[] = [];
-    let a = await dbh.collection("users").doc("user1").collection("ftpdata").get().then((snap) => {
-        snap.forEach((doc) => {
-            ftpDataListWk.push({
-                no: doc.data().no,
-                type: doc.data().type,
-                date: doc.data().date,
-                ftp: doc.data().ftp,
-                weight: doc.data().weight,
-                condition: doc.data().condition,
-                message: doc.data().message,
+    return new Promise((resolve, reject) => {
+        dbh.collection("users").doc(auth.currentUser?.uid).collection("ftpdata").get().then((snap) => {
+            let ftpDataListWk: FtpDataParam[] = [];
+            snap.forEach((doc) => {
+                ftpDataListWk.push({
+                    no: doc.data().no,
+                    type: doc.data().type,
+                    date: doc.data().date,
+                    ftp: doc.data().ftp,
+                    weight: doc.data().weight,
+                    condition: doc.data().condition,
+                    message: doc.data().message,
+                });
             });
-        });
-        return ftpDataListWk.sort((a, b) => {
-            return a.no > b.no ? 1 : -1;
+            let result = ftpDataListWk.sort((a, b) => {
+                return a.no > b.no ? 1 : -1;
+            });
+            return resolve(result);
+        }).catch((error) => {
+            return reject(error);
         });
     });
-    return Promise.resolve(a);
 }

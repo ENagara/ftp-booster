@@ -8,7 +8,7 @@ type LoginFormProps = {
     switchLogin: () => void;
 }
 const LoginForm = ({ switchLogin }: LoginFormProps) => {
-    const [mail, setMail] = React.useState('');
+    const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
     const [waitVisible, setWeitVisible] = React.useState(false);
@@ -16,9 +16,8 @@ const LoginForm = ({ switchLogin }: LoginFormProps) => {
     const login = () => {
         // スピナー開始
         setWeitVisible(true);
-        auth.signInWithEmailAndPassword(mail, password)
+        auth.signInWithEmailAndPassword(email, password)
             .then(() => {
-                console.log('ログイン成功');
                 // スピナーを停止
                 setWeitVisible(false);
             }).catch(({ message }) => {
@@ -33,8 +32,8 @@ const LoginForm = ({ switchLogin }: LoginFormProps) => {
             <TextInput
                 label='メールアドレス'
                 placeholder='ftp.booster@example.com'
-                value={mail}
-                onChangeText={setMail}
+                value={email}
+                onChangeText={setEmail}
                 style={styles.contents}
             />
             <TextInput

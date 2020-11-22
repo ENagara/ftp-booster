@@ -14,7 +14,7 @@ import ErrorBoundary from './src/components/ErrorBoundary';
 /** configs */
 import Colors from './src/configs/Colors';
 import KittenTheme from './src/configs/KittenTheme';
-import { auth } from './src/configs/Firebase';
+import { auth, dbh } from './src/configs/Firebase';
 
 const PaperTheme = {
   ...DefaultTheme,
@@ -44,11 +44,14 @@ const App = () => {
  */
 const RenderApp = () => {
   const [loggingState, setLoggingState] = React.useState<LogingState>(LogingState.Init);
-  auth.onAuthStateChanged((user) => {
-    if (user === null) {
-      setLoggingState(LogingState.UnLogging);
-    } else {
+  auth.onAuthStateChanged(async (user) => {
+    // Authとfirestoreの両方にユーザ情報が確認できた場合
+    if (user !== null && await searchFirestoreUser(user.uid)) {
+      // ログイン状態
       setLoggingState(LogingState.Logging);
+    } else {
+      // 未ログイン状態
+      setLoggingState(LogingState.UnLogging);
     }
   });
   switch (loggingState) {
@@ -66,6 +69,19 @@ const RenderApp = () => {
     case LogingState.UnLogging:
       return (<LoginScreen></LoginScreen>);
   }
+}
+
+/** firestoreにユーザ情報を検索 */
+const searchFirestoreUser = (uid: string) => {
+  return new Promise((resolve) => {
+    dbh.collection('users').doc(uid).get().then((doc) => {
+      if (doc.exists) {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    })
+  });
 }
 
 const LogingState = {
