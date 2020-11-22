@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { TextInput, Button, Divider } from 'react-native-paper';
+import { TextInput, Button, Divider, HelperText } from 'react-native-paper';
 import WaitDialog from '../components/WaitDialog';
 import { auth } from '../configs/Firebase';
 
@@ -10,19 +10,40 @@ type LoginFormProps = {
 const LoginForm = ({ switchLogin }: LoginFormProps) => {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-
     const [waitVisible, setWeitVisible] = React.useState(false);
+    const [operationDirty, setOperationDirty] = React.useState(false);
+    const [loginError, setLoginError] = React.useState(true);
+    const [, setError] = React.useState();
 
-    const login = () => {
+    /** メールアドレスチェック */
+    const eｍailRegexp = new RegExp(/^[\w\-\._]+@[\w\-\._]+\.[A-Za-z]+$/);
+    const isEｍail = () => {
+        return !eｍailRegexp.test(email);
+    }
+
+    /** パスワードチェック */
+    const isPassword = () => {
+        return password == '';
+    }
+
+    /** ログインアクション */
+    const loginAction = () => {
+        setOperationDirty(true);
+        // エラーがある場合は処理しない
+        if (isEｍail() || isPassword()) {
+            return;
+        }
+
         // スピナー開始
         setWeitVisible(true);
         auth.signInWithEmailAndPassword(email, password)
-            .then(() => {
-                // スピナーを停止
-                setWeitVisible(false);
-            }).catch(({ message }) => {
-                // スピナーを停止
-                console.log(message);
+            .catch(({ message }) => {
+                if (message === 'The password is invalid or the user does not have a password.'
+                    || message === 'There is no user record corresponding to this identifier. The user may have been deleted.') {
+                    setLoginError(true);
+                } else {
+                    setError(() => { throw new Error(message) });
+                }
                 setWeitVisible(false);
             });
     }
@@ -36,6 +57,9 @@ const LoginForm = ({ switchLogin }: LoginFormProps) => {
                 onChangeText={setEmail}
                 style={styles.contents}
             />
+            <HelperText type="error" visible={isEｍail() && operationDirty}>
+                メールアドレスを入力してください。
+            </HelperText>
             <TextInput
                 label='パスワード'
                 placeholder='********'
@@ -44,12 +68,18 @@ const LoginForm = ({ switchLogin }: LoginFormProps) => {
                 onChangeText={setPassword}
                 style={styles.contents}
             />
+            <HelperText type="error" visible={isPassword() && operationDirty}>
+                パスワードを入力してください。
+            </HelperText>
             <Button
                 mode="contained"
-                onPress={() => login()}
+                onPress={() => loginAction()}
                 style={styles.contents}>
                 ログイン
             </Button>
+            <HelperText type="error" visible={loginError && operationDirty}>
+                メールアドレスもしくはパスワードが間違っています。
+            </HelperText>
 
             <Divider style={styles.contents} />
 
@@ -67,11 +97,10 @@ const LoginForm = ({ switchLogin }: LoginFormProps) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16
+        padding: 16,
     },
     contents: {
         marginTop: 16,
-        marginBottom: 16,
     }
 });
 

@@ -106,7 +106,6 @@ const CreateAccountForm = ({ switchLogin }: CreateAccountFormProps) => {
 
     /** 再認証処理 */
     const reauthenticateAsync = () => {
-        console.log('reauthenticateAsync');
         return new Promise((resolve, reject) => {
             auth.signOut()
                 .then(() => auth.signInWithEmailAndPassword(email, password))
