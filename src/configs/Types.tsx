@@ -28,10 +28,23 @@ export type SettingsParamList = {
 
 export type FtpDataParam = {
   no: number,
-  type: 'ftp' | 'topic',
+  type: DataTypeParam,
   date: firebase.firestore.Timestamp,
   ftp?: number,
   weight?: number,
-  condition?: '良好' | '普通' | '悪い',
+  condition?: ConditionParam,
   message?: string,
 }
+
+export const DataTypeParam = {
+  FTP: 'ftp',
+  TOPIC: 'topic'
+} as const;
+export type DataTypeParam = typeof DataTypeParam[keyof typeof DataTypeParam];
+
+export const ConditionParam = {
+  GOOD: '良好',
+  NORMAL: '普通',
+  BAD:'悪い'
+} as const;
+export type ConditionParam = typeof ConditionParam[keyof typeof ConditionParam];

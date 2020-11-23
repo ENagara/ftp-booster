@@ -60,7 +60,7 @@ const LoginForm = ({ switchLogin }: LoginFormProps) => {
                 onChangeText={setEmail}
                 style={styles.contents}
             />
-            <HelperText type="error" visible={isEｍail() && operationDirty}>
+            <HelperText type='error' visible={isEｍail() && operationDirty}>
                 メールアドレスを入力してください。
             </HelperText>
             <TextInput
@@ -71,23 +71,23 @@ const LoginForm = ({ switchLogin }: LoginFormProps) => {
                 onChangeText={setPassword}
                 style={styles.contents}
             />
-            <HelperText type="error" visible={isPassword() && operationDirty}>
+            <HelperText type='error' visible={isPassword() && operationDirty}>
                 パスワードを入力してください。
             </HelperText>
             <Button
-                mode="contained"
+                mode='contained'
                 onPress={() => loginAction()}
                 style={styles.contents}>
                 ログイン
             </Button>
-            <HelperText type="error" visible={loginError && operationDirty}>
+            <HelperText type='error' visible={loginError && operationDirty}>
                 メールアドレスもしくはパスワードが間違っています。
             </HelperText>
 
             <Divider style={styles.contents} />
 
             <Button
-                mode="text"
+                mode='text'
                 onPress={() => switchLogin()}
                 style={styles.contents}>
                 メールアドレスで登録
