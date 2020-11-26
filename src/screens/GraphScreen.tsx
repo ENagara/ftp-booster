@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Tab, TabView } from '@ui-kitten/components';
 import LineChart from '../components/LineChart';
 import { useFocusEffect } from '@react-navigation/native';
@@ -132,16 +132,16 @@ const GraphScreen = () => {
                     <></>
                 </Tab>
             </TabView>
-            <LineChart dispData={dispData}></LineChart>
+            <View style={styles.lineChart}>
+                <LineChart dispData={dispData}></LineChart>
+            </View>
         </>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
+    lineChart: {
+        margin: 16
     },
     tab: {
         height: 50

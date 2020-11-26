@@ -29,6 +29,9 @@ const options = {
                 displayFormats: {
                     day: 'M/D'
                 }
+            },
+            ticks: {
+                maxTicksLimit: 12
             }
         }],
         yAxes: [{
@@ -76,6 +79,7 @@ type LineChartProps = {
 }
 
 const LineChart: React.FC<LineChartProps> = ({ dispData }: LineChartProps) => {
+    const strDispData = JSON.stringify(dispData);
     const js = `
     var data = {
         datasets: [
@@ -92,37 +96,7 @@ const LineChart: React.FC<LineChartProps> = ({ dispData }: LineChartProps) => {
                 pointHoverBorderWidth: 2,
                 pointRadius: 2,
                 pointHitRadius: 10,
-                data: [{
-                    x: new Date('2020-09-11 12:15'),
-                    y: 190,
-                    weight: 58.8,
-                    pwr: 3.2,
-                    condition: '良好'
-                }, {
-                    x: new Date('2020-9-25 15:10'),
-                    y: 225,
-                    weight: 57.9,
-                    pwr: 3.1,
-                    condition: '普通'
-                }, {
-                    x: new Date('2020-10-2 19:30'),
-                    y: 200,
-                    weight: 57.9,
-                    pwr: 3.5,
-                    condition: '普通'
-                }, {
-                    x: new Date('2020-10-5 22:59'),
-                    y: 190,
-                    weight: 55.0,
-                    pwr: 4.0,
-                    condition: '普通'
-                }, {
-                    x: new Date('2020-10-6 22:59'),
-                    y: 280,
-                    weight: 55.0,
-                    pwr: 4.0,
-                    condition: '悪い'
-                }]
+                data: ` + strDispData + `
             },
         ],
     };
