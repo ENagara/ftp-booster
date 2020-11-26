@@ -10,7 +10,7 @@ export const GetFtpDataList = async (): Promise<FtpDataParam[]> => {
                 ftpDataListWk.push({
                     no: doc.data().no,
                     type: doc.data().type,
-                    date: doc.data().date,
+                    date: getFormatDate(doc.data().date),
                     ftp: doc.data().ftp,
                     weight: doc.data().weight,
                     condition: doc.data().condition,
@@ -18,11 +18,15 @@ export const GetFtpDataList = async (): Promise<FtpDataParam[]> => {
                 });
             });
             let result = ftpDataListWk.sort((a, b) => {
-                return a.no > b.no ? 1 : -1;
+                return a.date < b.date ? 1 : -1;
             });
             return resolve(result);
         }).catch((error) => {
             return reject(error);
         });
     });
+}
+
+const getFormatDate = (firebaseDate: firebase.firestore.Timestamp) => {
+    return firebaseDate.toDate();
 }

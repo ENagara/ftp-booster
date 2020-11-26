@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { List, Layout, Text } from '@ui-kitten/components';
 import { StyleSheet, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 
 /** components */
 import SimpleDialog from './SimpleDialog';
@@ -30,11 +31,22 @@ const FeedComponent = () => {
         toggleDialog();
         setDeleteItem(item);
     }
+    /** スクリーンフォーカス時 */
+    useFocusEffect(
+        useCallback(() => {
+            GetFtpDataList().then(data => {
+                setFtpDataList(data);
+            }).catch(error => {
+                // setError
+            });
+        }, [])
+    );
     React.useEffect(() => {
-        const func = async () => {
-            setFtpDataList(await GetFtpDataList());
-        }
-        func();
+        GetFtpDataList().then(data => {
+            setFtpDataList(data);
+        }).catch(error => {
+            // setError
+        });
     }, [setDialogVisible]);
 
     const deleteAction = async (flug: boolean) => {
@@ -82,9 +94,9 @@ const FeedComponent = () => {
     );
 };
 
-const getFormatDate = (firebaseDate?: firebase.firestore.Timestamp) => {
-    if (firebaseDate) {
-        const date = firebaseDate.toDate();
+/** Date型をYYYY/MM/DDの形式で表示する */
+const getFormatDate = (date?: Date) => {
+    if (date) {
         return date.getFullYear().toString() + '/' + (date.getMonth() + 1).toString() + '/' + date.getDate().toString();
     }
 }
