@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { AntDesign } from '@expo/vector-icons';
 
 // ナビゲータ
@@ -20,32 +20,31 @@ const DISP_SETTINGS = '設定';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
-export default class BottomNavigation extends Component {
-  render() {
-    return (
-      <NavigationContainer>
-        <Tab.Navigator
-          initialRouteName='Feed'
-          tabBarOptions={{
-            activeTintColor: Colors.tint,
-          }}>
-          <Tab.Screen name='Feed' component={FeedNavigator} options={{
-            tabBarIcon: getTabNavigatorIcon('home'),
-            tabBarLabel: DISP_FEED,
-          }} />
-          <Tab.Screen name='Graph' component={GraphNavigator} options={{
-            tabBarIcon: getTabNavigatorIcon('linechart'),
-            tabBarLabel: DISP_GRAPH,
-          }} />
-          <Tab.Screen name='Settings' component={SettingsNavigator} options={{
-            tabBarIcon: getTabNavigatorIcon('setting'),
-            tabBarLabel: DISP_SETTINGS,
-          }} />
-        </Tab.Navigator>
-      </NavigationContainer>
-    );
-  }
+const BottomNavigation = () => {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator
+        initialRouteName='Feed'
+        tabBarOptions={{
+          activeTintColor: Colors.tint,
+        }}>
+        <Tab.Screen name='Feed' component={FeedNavigator} options={{
+          tabBarIcon: getTabNavigatorIcon('home'),
+          tabBarLabel: DISP_FEED,
+        }} />
+        <Tab.Screen name='Graph' component={GraphNavigator} options={{
+          tabBarIcon: getTabNavigatorIcon('linechart'),
+          tabBarLabel: DISP_GRAPH,
+        }} />
+        <Tab.Screen name='Settings' component={SettingsNavigator} options={{
+          tabBarIcon: getTabNavigatorIcon('setting'),
+          tabBarLabel: DISP_SETTINGS,
+        }} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
 }
+
 
 /** AntDesignアイコン読み込み */
 const getTabNavigatorIcon = (name: string) => ({ color, size }: {
@@ -59,7 +58,7 @@ const FeedNavigator = () => {
   return (
     <FeedStack.Navigator>
       <FeedStack.Screen
-        name='FeedScreen'
+        name='Feed'
         component={FeedScreen}
         options={ScreenOptions(DISP_FEED)}
       />
@@ -72,7 +71,7 @@ const GraphNavigator = () => {
   return (
     <GraphStack.Navigator>
       <GraphStack.Screen
-        name='GraphScreen'
+        name='Graph'
         component={GraphScreen}
         options={ScreenOptions(DISP_GRAPH)}
       />
@@ -85,7 +84,7 @@ const SettingsNavigator = () => {
   return (
     <SettingsStack.Navigator>
       <SettingsStack.Screen
-        name='SettingsScreen'
+        name='Settings'
         component={SettingsScreen}
         options={ScreenOptions(DISP_SETTINGS)}
       />
@@ -100,3 +99,5 @@ const ScreenOptions = (title: string) => {
     headerStyle: { backgroundColor: Colors.tint }
   }
 }
+
+export default BottomNavigation;

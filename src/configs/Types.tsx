@@ -11,25 +11,25 @@ export type BottomTabParamList = {
 };
 
 export type FeedParamList = {
-  FeedScreen: undefined;
+  Feed: undefined;
 };
 
 export type GraphParamList = {
-  GraphScreen: undefined;
+  Graph: undefined;
 };
 
 export type ColumnsParamList = {
-  ColumnsScreen: undefined;
+  Columns: undefined;
 };
 
 export type SettingsParamList = {
-  SettingsScreen: undefined;
+  Settings: undefined;
 };
 
 export type FtpDataParam = {
   no: number,
   type: DataTypeParam,
-  date: firebase.firestore.Timestamp,
+  date: Date,
   ftp?: number,
   weight?: number,
   condition?: ConditionParam,
