@@ -3,6 +3,9 @@ import { View, Platform } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { Line } from 'react-chartjs-2';
 
+/** configs */
+import { PointDataParam } from '../configs/Types';
+
 const htmlContent = `
 <html>
   <head>
@@ -16,52 +19,7 @@ const htmlContent = `
 </html>
 `;
 
-const pointData =
-    [{
-        x: new Date('2020-09-11 12:15'),
-        y: 190,
-        weight: 58.8,
-        pwr: 3.2,
-        condition: '良好'
-    }, {
-        x: new Date('2020-9-25 15:10'),
-        y: 225,
-        weight: 57.9,
-        pwr: 3.1,
-        condition: '普通'
-    }, {
-        x: new Date('2020-10-2 19:30'),
-        y: 200,
-        weight: 57.9,
-        pwr: 3.5,
-        condition: '普通'
-    }, {
-        x: new Date('2020-10-3 22:59'),
-        y: 250,
-        weight: 55.0,
-        pwr: 4.0,
-        condition: '悪い'
-    }];
 
-
-const data = {
-    datasets: [
-        {
-            fill: true,
-            lineTension: 0.2,
-            backgroundColor: 'rgba(222, 143, 24,0.4)',
-            borderColor: 'rgba(222, 143, 24,1)',
-            pointBorderWidth: 10,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgba(222, 143, 24,1)',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
-            pointHoverBorderWidth: 2,
-            pointRadius: 2,
-            pointHitRadius: 10,
-            data: pointData
-        }
-    ]
-};
 const options = {
     scales: {
         xAxes: [{
@@ -113,12 +71,11 @@ const options = {
     maintainAspectRatio: false
 }
 
-type Props = {
-    selectedPeriodIndex: number;
-    selectedDataOptinoIndex: number;
+type LineChartProps = {
+    dispData: PointDataParam[],
 }
 
-const LineChart: React.FC<Props>  = ({ selectedPeriodIndex, selectedDataOptinoIndex}:Props) => {
+const LineChart: React.FC<LineChartProps> = ({ dispData }: LineChartProps) => {
     const js = `
     var data = {
         datasets: [
@@ -174,7 +131,7 @@ const LineChart: React.FC<Props>  = ({ selectedPeriodIndex, selectedDataOptinoIn
             xAxes: [{
                 ticks: {
                     callback: function(milliseconds) {return moment(milliseconds).format("M/D")}
-                } 
+                }
             }],
             yAxes: [{
                 scaleLabel: {
@@ -217,6 +174,25 @@ const LineChart: React.FC<Props>  = ({ selectedPeriodIndex, selectedDataOptinoIn
         options: options,
     });
       `;
+
+    const data = {
+        datasets: [
+            {
+                fill: true,
+                lineTension: 0.2,
+                backgroundColor: 'rgba(222, 143, 24,0.4)',
+                borderColor: 'rgba(222, 143, 24,1)',
+                pointBorderWidth: 10,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: 'rgba(222, 143, 24,1)',
+                pointHoverBorderColor: 'rgba(220,220,220,1)',
+                pointHoverBorderWidth: 2,
+                pointRadius: 2,
+                pointHitRadius: 10,
+                data: dispData,
+            }
+        ]
+    };
 
     if (Platform.OS == 'web') {
         return (

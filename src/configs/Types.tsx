@@ -48,3 +48,12 @@ export const ConditionParam = {
   BAD:'悪い'
 } as const;
 export type ConditionParam = typeof ConditionParam[keyof typeof ConditionParam];
+
+export type PointDataParam = {
+  x: Date
+  y: number,
+  ftp: number,
+  weight: number,
+  pwr: number,
+  condition?: ConditionParam,
+}
