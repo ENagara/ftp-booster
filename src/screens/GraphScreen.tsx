@@ -6,9 +6,9 @@ import { useFocusEffect } from '@react-navigation/native';
 
 /** configs */
 import { FtpDataParam, DataTypeParam, PointDataParam } from '../configs/Types';
-/** actions */
-import { GetFtpDataList } from '../actions/FtpDataAction';
 
+/** actions */
+import { getFtpDataList } from '../actions/FtpDataAction';
 
 const GraphScreen = () => {
 
@@ -24,7 +24,7 @@ const GraphScreen = () => {
             setSelectedPeriodIndex(1);
             setSelectedDataOptinoIndex(0);
             // データ取得
-            GetFtpDataList().then(data => {
+            getFtpDataList().then(data => {
                 wkOrgFtpData = data.filter(item => {
                     return item.type === DataTypeParam.FTP
                 });

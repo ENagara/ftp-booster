@@ -12,7 +12,7 @@ import { FtpDataParam } from '../configs/Types';
 import Colors from '../configs/Colors';
 
 /** actions */
-import { GetFtpDataList } from '../actions/FtpDataAction';
+import { getFtpDataList } from '../actions/FtpDataAction';
 
 type RenderItemProps = {
     item: FtpDataParam,
@@ -34,7 +34,7 @@ const FeedComponent = () => {
     /** スクリーンフォーカス時 */
     useFocusEffect(
         useCallback(() => {
-            GetFtpDataList().then(data => {
+            getFtpDataList().then(data => {
                 setFtpDataList(data);
             }).catch(error => {
                 // setError
@@ -42,7 +42,7 @@ const FeedComponent = () => {
         }, [])
     );
     React.useEffect(() => {
-        GetFtpDataList().then(data => {
+        getFtpDataList().then(data => {
             setFtpDataList(data);
         }).catch(error => {
             // setError
@@ -55,7 +55,7 @@ const FeedComponent = () => {
             // 削除処理
             console.log(flug + ': ' + deleteItem.no);
             // 一覧データ再取得
-            setFtpDataList(await GetFtpDataList());
+            setFtpDataList(await getFtpDataList());
 
         }
     }
