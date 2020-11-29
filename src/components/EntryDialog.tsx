@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, TextInput, HelperText, Portal, Dialog, FAB, Text } from 'react-native-paper';
 import { Tab, TabView } from '@ui-kitten/components';
 import { AntDesign } from '@expo/vector-icons';
 import PlatformDatepicker from './PlatformDatepicker';
+
+/** actions */
+import { getWeightBefore, entryFtp } from '../actions/FtpDataAction';
 
 /** components */
 import WaitDialog from './WaitDialog';
@@ -22,9 +25,16 @@ const initConditionOption: ConditionOption[] = [
     { text: ConditionParam.BAD, mode: 'outlined' },
 ];
 
-const EntryDialog = () => {
+type EntryDialogProps = {
+    action: (flug: boolean) => void;
+}
+const EntryDialog = ({ action }: EntryDialogProps) => {
     const [visible, setVisible] = useState<boolean>();
     const getVisible = () => !!visible;
+    const entryAction = (flug: boolean) => {
+        setVisible(false);
+        action(flug);
+    }
 
     return (
         <>
@@ -40,7 +50,7 @@ const EntryDialog = () => {
                     onDismiss={() => setVisible(false)}
                     visible={getVisible()}
                     dismissable={false}>
-                    <EntryContainer action={setVisible}></EntryContainer>
+                    <EntryContainer action={entryAction}></EntryContainer>
                 </Dialog>
             </Portal>
         </>
@@ -63,6 +73,17 @@ const EntryContainer = ({ action }: EntryContainerProp) => {
     const [operationDirty, setOperationDirty] = React.useState(false);
     const [, setError] = React.useState();
 
+    /** 前回登録した体重を初期表示 */
+    useEffect(() => {
+        getWeightBefore().then(weight => {
+            if (weight > 0) {
+                setWeight(weight.toString());
+            }
+        }).catch(error => {
+            setError(() => { throw new Error(error); });
+        });
+    }, []);
+
     /** 登録ボタン押下 */
     const entryAction = async () => {
         setOperationDirty(true);
@@ -82,9 +103,14 @@ const EntryContainer = ({ action }: EntryContainerProp) => {
             weight: Number.parseFloat(weight),
             condition: condition
         }
-        
+
         // 入力データをfirestoreに登録
-        console.log('firestoreに登録');
+        entryFtp(ftpData).then(() => {
+            setWeitVisible(false);
+            action(true);
+        }).catch(error =>{
+            setError(() => { throw new Error(error); });
+        });
     }
 
     /** キャンセルボタン押下 */

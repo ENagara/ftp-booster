@@ -14,43 +14,51 @@ import Colors from '../configs/Colors';
 /** actions */
 import { getFtpDataList } from '../actions/FtpDataAction';
 
-type RenderItemProps = {
-    item: FtpDataParam,
+type FeedComponentProps = {
+    actionFlug: boolean,
 }
 
 /** フィードコンポーネント */
-const FeedComponent = () => {
+const FeedComponent = ({ actionFlug }: FeedComponentProps) => {
     const [ftpDataList, setFtpDataList] = React.useState<FtpDataParam[]>([]);
 
-    const [dialogVisible, setDialogVisible] = React.useState<boolean>();
-    const toggleDialog = () => setDialogVisible(!dialogVisible);
-    const getDialogVisible = () => !!dialogVisible;
+    const [deleteDialogVisible, setDeleteDialogVisible] = React.useState<boolean>();
+    const toggleDialog = () => setDeleteDialogVisible(!deleteDialogVisible);
+    const getDeleteDialogVisible = () => !!deleteDialogVisible;
 
     const [deleteItem, setDeleteItem] = React.useState<FtpDataParam>();
     const deleteIconPress = (item: FtpDataParam) => {
         toggleDialog();
         setDeleteItem(item);
     }
+    const [, setError] = React.useState();
+
     /** スクリーンフォーカス時 */
     useFocusEffect(
         useCallback(() => {
             getFtpDataList().then(data => {
                 setFtpDataList(data);
             }).catch(error => {
-                // setError
+                setError(() => { throw new Error(error); });
             });
         }, [])
     );
-    React.useEffect(() => {
-        getFtpDataList().then(data => {
-            setFtpDataList(data);
-        }).catch(error => {
-            // setError
-        });
-    }, [setDialogVisible]);
 
-    const deleteAction = async (flug: boolean) => {
-        toggleDialog();
+    /** 
+     * 一覧データ更新
+     * 削除ダイアログを閉じたとき、ftp登録時
+     */
+    React.useEffect(() => {
+        if (!deleteDialogVisible) {
+            getFtpDataList().then(data => {
+                setFtpDataList(data);
+            }).catch(error => {
+                setError(() => { throw new Error(error); });
+            });
+        }
+    }, [deleteDialogVisible, actionFlug]);
+
+    const deleteAction = (flug: boolean) => {
         if (deleteItem) {
             // 削除処理
             console.log(flug + ': ' + deleteItem.no);
@@ -60,6 +68,9 @@ const FeedComponent = () => {
         }
     }
 
+    type RenderItemProps = {
+        item: FtpDataParam,
+    }
     const renderItem = ({ item }: RenderItemProps) => (
         <Layout style={styles.listStyle} >
             <Layout style={styles.iconItemContainer}>
@@ -87,7 +98,7 @@ const FeedComponent = () => {
             <SimpleDialog
                 title={getFormatDate(deleteItem?.date) + '\nFTP ' + deleteItem?.ftp + ' W のデータを削除しますか？'}
                 okButtonName='削除'
-                visible={getDialogVisible()}
+                visible={getDeleteDialogVisible()}
                 action={deleteAction}
             />
         </ScrollView>
