@@ -9,6 +9,7 @@ export const getFtpDataList = (): Promise<FtpDataParam[]> => {
             let result: FtpDataParam[] = [];
             snap.forEach((doc) => {
                 result.push({
+                    docId: doc.id,
                     no: doc.data().no,
                     type: doc.data().type,
                     date: getFormatDateFirebase(doc.data().date),
@@ -29,7 +30,7 @@ export const getFtpDataList = (): Promise<FtpDataParam[]> => {
 export const getWeightBefore = (): Promise<number> => {
     return new Promise((resolve, reject) => {
         dbh.collection('users').doc(auth.currentUser?.uid).collection('ftpdata')
-            .where('type', '==', 'ftp').orderBy('date','desc').limit(1).get().then((snap) => {
+            .where('type', '==', 'ftp').orderBy('date', 'desc').limit(1).get().then((snap) => {
                 if (snap.docs.length === 0) {
                     resolve(-1);
                 } else {
@@ -60,12 +61,12 @@ export const entryFtp = (ftpData: FtpDataParam) => {
 export const getFtpSeqIncrement = (): Promise<number> => {
     return new Promise((resolve, reject) => {
         dbh.collection('users').doc(auth.currentUser?.uid).get().then(snap => {
-            if (snap.exists) {
+            if (snap.get('ftpseq') == undefined) {
+                // データが存在しない場合0を返却
+                resolve(0);
+            } else {
                 // 番号+1を返却
                 resolve(snap.get('ftpseq') + 1);
-            } else {
-                // 0件の場合0を返却
-                resolve(0);
             }
         }).catch(error => {
             reject(error);
@@ -78,7 +79,7 @@ export const updateFtpSeq = (no: number): Promise<number> => {
     return new Promise((resolve, reject) => {
         dbh.collection('users').doc(auth.currentUser?.uid).set({
             ftpseq: no
-        }).then(() => {
+        }, { merge: true }).then(() => {
             resolve(no);
         }).catch(error => {
             reject(error);
@@ -101,6 +102,18 @@ export const insertFtpData = (no: number, ftpData: FtpDataParam): Promise<void> 
         }).catch(error => {
             reject(error);
         });
+    });
+}
+
+/** FTPデータを削除 */
+export const deleteFtpData = (docId: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        dbh.collection('users').doc(auth.currentUser?.uid).collection('ftpdata').doc(docId).delete()
+            .then(() => {
+                resolve();
+            }).catch(error => {
+                reject(error);
+            });
     });
 }
 

@@ -27,6 +27,7 @@ export type SettingsParamList = {
 };
 
 export type FtpDataParam = {
+  docId: string,
   no: number,
   type: DataTypeParam,
   date: Date,

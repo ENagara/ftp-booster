@@ -12,7 +12,7 @@ import { FtpDataParam } from '../configs/Types';
 import Colors from '../configs/Colors';
 
 /** actions */
-import { getFtpDataList } from '../actions/FtpDataAction';
+import { getFtpDataList, deleteFtpData } from '../actions/FtpDataAction';
 
 type FeedComponentProps = {
     actionFlug: boolean,
@@ -58,14 +58,18 @@ const FeedComponent = ({ actionFlug }: FeedComponentProps) => {
         }
     }, [deleteDialogVisible, actionFlug]);
 
+    /** 削除ボタンアクション */
     const deleteAction = (flug: boolean) => {
-        if (deleteItem) {
-            // 削除処理
-            console.log(flug + ': ' + deleteItem.no);
-            // 一覧データ再取得
-            setFtpDataList(await getFtpDataList());
-
+        if (!flug || !deleteItem) {
+            toggleDialog();
+            return;
         }
+        // 削除処理
+        deleteFtpData(deleteItem.docId).then(() => {
+            toggleDialog();
+        }).catch(error => {
+            setError(() => { throw new Error(error); });
+        });
     }
 
     type RenderItemProps = {
