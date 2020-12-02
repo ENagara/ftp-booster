@@ -17,42 +17,93 @@ const CreateAccountForm = ({ switchLogin }: CreateAccountFormProps) => {
     const [password, setPassword] = React.useState('');
     const [passwordConfirm, setPasswordConfirm] = React.useState('');
 
+    const [nameMessage, setNameMessage] = React.useState<string>();
+    const [emailMessage, setEmailMessage] = React.useState<string>();
+    const [passwordMessage, setPasswordMessage] = React.useState<string>();
+    const [passwordConfirmMessage, setPasswordConfirmMessage] = React.useState<string>();
+
     const [waitVisible, setWeitVisible] = React.useState(false);
     const [operationDirty, setOperationDirty] = React.useState(false);
     const [, setError] = React.useState();
 
+    /** ユーザ名変更 */
+    const nameChange = (name: string) => {
+        setName(name);
+        if (operationDirty) isName(name);
+    }
+
+    /** メールアドレス変更 */
+    const changeEmail = (email: string) => {
+        setEmail(email);
+        if (operationDirty) isEｍail(email);
+    }
+
+    /** パスワード変更 */
+    const changePassword = (password: string) => {
+        setPassword(password);
+        if (operationDirty) isPassword(password);
+    }
+
     /** ユーザ名チェック */
-    const nameRegexp = new RegExp(/^.{1,}$/);
-    const isName = () => {
-        return !nameRegexp.test(name);
+    const nameRegexp = new RegExp(/^.{1,20}$/);
+    const isName = (name: string) => {
+        const result = nameRegexp.test(name);
+        if (result) {
+            setNameMessage('');
+        } else {
+            setNameMessage('20文字以内で入力してください');
+        }
+        return result;
     }
 
     /** メールアドレスチェック */
     const eｍailRegexp = new RegExp(/^[\w\-\._]+@[\w\-\._]+\.[A-Za-z]+$/);
-    const isEｍail = () => {
-        return !eｍailRegexp.test(email);
+    const isEｍail = (email: string) => {
+        const result = eｍailRegexp.test(email);
+        if (result) {
+            setEmailMessage('');
+        } else {
+            setEmailMessage('メールアドレスを入力してください');
+        }
+        return result;
     }
 
     /** パスワードチェック */
-    const passwordRegexp = new RegExp(/^.{6,}$/);
-    const isPassword = () => {
-        return !passwordRegexp.test(password);
+    const passwordRegexp = new RegExp(/^[A-Za-z\d]{6,32}$/);
+    const isPassword = (password: string) => {
+        const result = passwordRegexp.test(password);
+        if (result) {
+            setPasswordMessage('');
+        } else {
+            setPasswordMessage('パスワードは半角英数の6～32文字で入力してください');
+        }
+        return result;
     }
 
     /** パスワード確認チェック */
-    const isPasswordConfirm = () => {
-        return password !== passwordConfirm;
+    const isPasswordConfirm = (passwordConfirm: string) => {
+        const result = password === passwordConfirm;
+        if (result) {
+            setPasswordConfirmMessage('');
+        } else {
+            setPasswordConfirmMessage('パスワードが異なっています');
+        }
+        return result;
     }
 
     const createUser = async () => {
+        // 操作済みにする
         setOperationDirty(true);
-        // エラーがある場合は処理しない
-        if (isName()
-            || isEｍail()
-            || isPassword()
-            || isPasswordConfirm()) {
-            return;
-        }
+
+        // バリデーションチェック
+        let validationError = false;
+        if (!isName(name)) validationError = true;
+        if (!isEｍail(email)) validationError = true;
+        if (!isPassword(password)) validationError = true;
+        if (!isPasswordConfirm(passwordConfirm)) validationError = true;
+
+        // エラーが存在する場合、以降の処理を実施しない
+        if (validationError) return;
 
         let errormsg: string = '';
         // スピナー開始
@@ -84,7 +135,7 @@ const CreateAccountForm = ({ switchLogin }: CreateAccountFormProps) => {
         });
     }
 
-    /** 
+    /**
      * firestoreのユーザ情報を検索
      * true: firestoreにユーザ情報が存在する
      * false: firestoreにユーザ情報が存在しない
@@ -156,32 +207,35 @@ const CreateAccountForm = ({ switchLogin }: CreateAccountFormProps) => {
                 label='ユーザ名'
                 placeholder='Jhon'
                 value={name}
-                onChangeText={setName}
+                maxLength={30}
+                onChangeText={nameChange}
                 style={styles.contents}
             />
-            <HelperText type="error" visible={isName() && operationDirty}>
-                ユーザ名を入力してください。
+            <HelperText type="error" visible={operationDirty}>
+                {nameMessage}
             </HelperText>
+
             <TextInput
                 label='メールアドレス'
                 placeholder='ftp.booster@example.com'
                 value={email}
-                onChangeText={setEmail}
+                onChangeText={changeEmail}
                 style={styles.contents}
             />
-            <HelperText type="error" visible={isEｍail() && operationDirty}>
-                メールアドレスを入力してください。
+            <HelperText type="error" visible={operationDirty}>
+                {emailMessage}
             </HelperText>
+
             <TextInput
                 label='パスワード'
                 placeholder='********'
                 value={password}
                 secureTextEntry={true}
-                onChangeText={setPassword}
+                onChangeText={changePassword}
                 style={styles.contents}
             />
-            <HelperText type="error" visible={isPassword() && operationDirty}>
-                6文字以上で入力してください。
+            <HelperText type="error" visible={operationDirty}>
+                {passwordMessage}
             </HelperText>
             <TextInput
                 label='パスワード(確認) '
@@ -191,8 +245,8 @@ const CreateAccountForm = ({ switchLogin }: CreateAccountFormProps) => {
                 onChangeText={setPasswordConfirm}
                 style={styles.contents}
             />
-            <HelperText type="error" visible={isPasswordConfirm() && operationDirty}>
-                パスワードが異なっています。
+            <HelperText type="error" visible={operationDirty}>
+                {passwordConfirmMessage}
             </HelperText>
             <Button
                 mode="contained"
