@@ -1,8 +1,12 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { TextInput, Button, Divider, HelperText } from 'react-native-paper';
+
+/** actions */
+import { signInFirebase } from '../actions/UserDataAction';
+
+/** components */
 import WaitDialog from '../components/WaitDialog';
-import { auth } from '../configs/Firebase';
 
 type LoginFormProps = {
     switchLogin: () => void;
@@ -74,7 +78,8 @@ const LoginForm = ({ switchLogin }: LoginFormProps) => {
         }
         // スピナー開始
         setWeitVisible(true);
-        auth.signInWithEmailAndPassword(email, password)
+        // ログイン処理
+        signInFirebase(email, password)
             .catch(error => {
                 if (error.code) {
                     switch (error.code) {

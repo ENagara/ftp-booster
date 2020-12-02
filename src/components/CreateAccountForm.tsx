@@ -97,6 +97,7 @@ const CreateAccountForm = ({ switchLogin }: CreateAccountFormProps) => {
         return result;
     }
 
+    /** ユーザ登録アクション */
     const createUser = async () => {
         // 操作済みにする
         setOperationDirty(true);
@@ -117,7 +118,7 @@ const CreateAccountForm = ({ switchLogin }: CreateAccountFormProps) => {
         createFirebaseUser(name, email, password)
             .catch(error => {
                 if (error.code) {
-                    switch (error?.code) {
+                    switch (error.code) {
                         case 'auth/email-already-in-use':
                             setEmailMessage('登録済みのメールアドレスです');
                             break;
@@ -130,6 +131,7 @@ const CreateAccountForm = ({ switchLogin }: CreateAccountFormProps) => {
                 } else {
                     setError(() => { throw new Error(error) });
                 }
+                // スピナー停止
                 setWeitVisible(false);
             });
     }

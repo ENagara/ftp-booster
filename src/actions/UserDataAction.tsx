@@ -13,6 +13,14 @@ export const createFirebaseUser = (name: string, email: string, password: string
     });
 }
 
+/** firebaseにサインイン */
+export const signInFirebase = (email: string, password: string) => {
+    return new Promise((resolve, reject) => {
+        auth.signInWithEmailAndPassword(email, password)
+            .catch(error => reject(error));
+    });
+}
+
 /** firebaseのAuthenticationにユーザを作成 */
 const createUserAuthentication = (email: string, password: string) => {
     return new Promise((resolve, reject) => {
