@@ -2,11 +2,11 @@ import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { TextInput, Button, Divider, HelperText } from 'react-native-paper';
 
+/** actions */
+import { createFirebaseUser } from '../actions/UserDataAction';
+
 /** components */
 import WaitDialog from './WaitDialog';
-
-/** configs */
-import { auth, dbh } from '../configs/Firebase';
 
 type CreateAccountFormProps = {
     switchLogin: () => void;
@@ -42,6 +42,12 @@ const CreateAccountForm = ({ switchLogin }: CreateAccountFormProps) => {
     const changePassword = (password: string) => {
         setPassword(password);
         if (operationDirty) isPassword(password);
+    }
+
+    /** パスワード確認変更 */
+    const changePasswordConfirm = (passwordConfirm: string) => {
+        setPasswordConfirm(passwordConfirm);
+        if (operationDirty) isPasswordConfirm(passwordConfirm);
     }
 
     /** ユーザ名チェック */
@@ -105,99 +111,27 @@ const CreateAccountForm = ({ switchLogin }: CreateAccountFormProps) => {
         // エラーが存在する場合、以降の処理を実施しない
         if (validationError) return;
 
-        let errormsg: string = '';
         // スピナー開始
         setWeitVisible(true);
         // ユーザの作成
-        await createUserAuthentication()
-            .then(searchFirestoreUser)
-            .then((userExists) => deleteUserAuthentication(userExists))
-            .then(createUserFirestore)
-            .then(reauthenticateAsync)
+        createFirebaseUser(name, email, password)
             .catch(error => {
-                errormsg = error;
-            });
-        if (errormsg) {
-            setError(() => { throw new Error(errormsg) });
-        }
-    }
-
-    /** firebaseのAuthenticationにユーザを作成 */
-    const createUserAuthentication = () => {
-        return new Promise((resolve, reject) => {
-            auth.createUserWithEmailAndPassword(email, password)
-                .then(() => {
-                    // ユーザの作成成功
-                    resolve();
-                }).catch((error) => {
-                    reject(error);
-                });
-        });
-    }
-
-    /**
-     * firestoreのユーザ情報を検索
-     * true: firestoreにユーザ情報が存在する
-     * false: firestoreにユーザ情報が存在しない
-     */
-    const searchFirestoreUser = (): Promise<boolean> => {
-        return new Promise((resolve, reject) => {
-            dbh.collection('users').doc(auth.currentUser?.uid).get().then((doc) => {
-                if (doc.exists) {
-                    // ユーザ情報が存在する場合
-                    resolve(true);
+                if (error.code) {
+                    switch (error?.code) {
+                        case 'auth/email-already-in-use':
+                            setEmailMessage('登録済みのメールアドレスです');
+                            break;
+                        case 'auth/weak-password':
+                            setEmailMessage('脆弱なパスワードです');
+                            break;
+                        default:
+                            setError(() => { throw new Error(error) });
+                    }
                 } else {
-                    // ユーザ情報が存在しない場合
-                    resolve(false);
+                    setError(() => { throw new Error(error) });
                 }
-            }).catch((error) => {
-                reject(error);
+                setWeitVisible(false);
             });
-        });
-    }
-
-    /** firebaseのAuthenticationからユーザを削除 */
-    const deleteUserAuthentication = (userExists: boolean) => {
-        return new Promise((resolve, reject) => {
-            // ユーザが存在しない場合、処理しない
-            if (!userExists) {
-                resolve();
-            } else {
-                // ユーザが存在する場合、Authenticationからユーザを削除する
-                auth.currentUser?.delete().then(() => {
-                    reject('ユーザ情報作成処理で失敗しました。');
-                }).catch((error) => {
-                    reject(error);
-                });
-            }
-        });
-    }
-
-    /** firestoreにユーザ情報を追加 */
-    const createUserFirestore = () => {
-        return new Promise((resolve, reject) => {
-            dbh.collection('users').doc(auth.currentUser?.uid).set({
-                displayName: name,
-                email: email
-            }).then(() => {
-                // firestore追加成功
-                resolve();
-            }).catch((error) => {
-                reject(error);
-            });
-        });
-    }
-
-    /** 再認証処理 */
-    const reauthenticateAsync = () => {
-        return new Promise((resolve, reject) => {
-            auth.signOut()
-                .then(() => auth.signInWithEmailAndPassword(email, password))
-                .then(resolve)
-                .catch((error) => {
-                    reject(error);
-                });
-        });
     }
 
     return (
@@ -242,7 +176,7 @@ const CreateAccountForm = ({ switchLogin }: CreateAccountFormProps) => {
                 placeholder='********'
                 value={passwordConfirm}
                 secureTextEntry={true}
-                onChangeText={setPasswordConfirm}
+                onChangeText={changePasswordConfirm}
                 style={styles.contents}
             />
             <HelperText type="error" visible={operationDirty}>
