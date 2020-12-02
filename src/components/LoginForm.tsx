@@ -10,43 +10,91 @@ type LoginFormProps = {
 const LoginForm = ({ switchLogin }: LoginFormProps) => {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
+
+    const [emailMessage, setEmailMessage] = React.useState<string>();
+    const [passwordMessage, setPasswordMessage] = React.useState<string>();
+    const [loginErrorMessage, setLoginErrorMessage] = React.useState<string>();
+
     const [waitVisible, setWeitVisible] = React.useState(false);
     const [operationDirty, setOperationDirty] = React.useState(false);
-    const [loginError, setLoginError] = React.useState(false);
     const [, setError] = React.useState();
+
+    /** メールアドレス変更 */
+    const changeEmail = (email: string) => {
+        setEmail(email);
+        if (operationDirty) isEｍail(email);
+    }
+
+    /** パスワード変更 */
+    const changePassword = (password: string) => {
+        setPassword(password);
+        if (operationDirty) isPassword(password);
+    }
+
 
     /** メールアドレスチェック */
     const eｍailRegexp = new RegExp(/^[\w\-\._]+@[\w\-\._]+\.[A-Za-z]+$/);
-    const isEｍail = () => {
-        return !eｍailRegexp.test(email);
+    const isEｍail = (email: string) => {
+        const result = eｍailRegexp.test(email);
+        if (result) {
+            setEmailMessage('');
+        } else {
+            setEmailMessage('メールアドレスを入力してください');
+        }
+        return result;
     }
 
     /** パスワードチェック */
-    const isPassword = () => {
-        return password == '';
+    const passwordRegexp = new RegExp(/^[A-Za-z\d]{6,32}$/);
+    const isPassword = (password: string) => {
+        const result = passwordRegexp.test(password);
+        if (result) {
+            setPasswordMessage('');
+        } else {
+            setPasswordMessage('パスワードは半角英数の6～32文字で入力してください');
+        }
+        return result;
     }
 
     /** ログインアクション */
     const loginAction = () => {
+        // 操作済みにする
         setOperationDirty(true);
-        // エラーがある場合は処理しない
-        if (isEｍail() || isPassword()) {
+
+        // バリデーションチェック
+        let validationError = false;
+        if (!isEｍail(email)) validationError = true;
+        if (!isPassword(password)) validationError = true;
+
+        // エラーが存在する場合、以降の処理を実施しない
+        if (validationError) {
+            // ログインエラーメッセージを初期化
+            setLoginErrorMessage('');
             return;
         }
-
         // スピナー開始
         setWeitVisible(true);
         auth.signInWithEmailAndPassword(email, password)
-            .then(() => {
-                setLoginError(false);
-            })
-            .catch(({ message }) => {
-                if (message === 'The password is invalid or the user does not have a password.'
-                    || message === 'There is no user record corresponding to this identifier. The user may have been deleted.') {
-                    setLoginError(true);
+            .catch(error => {
+                if (error.code) {
+                    switch (error.code) {
+                        case 'auth/invalid-email':
+                            setLoginErrorMessage('無効なメールアドレスです');
+                            break;
+                        case 'auth/user-disabled':
+                            setLoginErrorMessage('アカウントがロックされています。お問い合わせください。');
+                            break;
+                        case 'auth/user-not-found':
+                        case 'auth/wrong-password':
+                            setLoginErrorMessage('メールアドレスもしくはパスワードが間違っています。');
+                            break;
+                        default:
+                            setError(() => { throw new Error(error) });
+                    }
                 } else {
-                    setError(() => { throw new Error(message) });
+                    setError(() => { throw new Error(error) });
                 }
+                // スピナー停止
                 setWeitVisible(false);
             });
     }
@@ -57,22 +105,22 @@ const LoginForm = ({ switchLogin }: LoginFormProps) => {
                 label='メールアドレス'
                 placeholder='ftp.booster@example.com'
                 value={email}
-                onChangeText={setEmail}
+                onChangeText={changeEmail}
                 style={styles.contents}
             />
-            <HelperText type='error' visible={isEｍail() && operationDirty}>
-                メールアドレスを入力してください。
+            <HelperText type='error' visible={operationDirty}>
+                {emailMessage}
             </HelperText>
             <TextInput
                 label='パスワード'
                 placeholder='********'
                 value={password}
                 secureTextEntry={true}
-                onChangeText={setPassword}
+                onChangeText={changePassword}
                 style={styles.contents}
             />
-            <HelperText type='error' visible={isPassword() && operationDirty}>
-                パスワードを入力してください。
+            <HelperText type='error' visible={operationDirty}>
+                {passwordMessage}
             </HelperText>
             <Button
                 mode='contained'
@@ -80,8 +128,8 @@ const LoginForm = ({ switchLogin }: LoginFormProps) => {
                 style={styles.contents}>
                 ログイン
             </Button>
-            <HelperText type='error' visible={loginError && operationDirty}>
-                メールアドレスもしくはパスワードが間違っています。
+            <HelperText type='error' visible={operationDirty}>
+                {loginErrorMessage}
             </HelperText>
 
             <Divider style={styles.contents} />
