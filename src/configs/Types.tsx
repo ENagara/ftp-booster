@@ -50,6 +50,13 @@ export const ConditionParam = {
 } as const;
 export type ConditionParam = typeof ConditionParam[keyof typeof ConditionParam];
 
+export const GraphState = {
+  Loading: 'loading',
+  DataExists: 'dataExists',
+  DataNotExists: 'dataNotExists',
+} as const;
+export type GraphState = typeof GraphState[keyof typeof GraphState];
+
 export type PointDataParam = {
   x: Date
   y: number,
