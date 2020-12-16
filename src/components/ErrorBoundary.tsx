@@ -1,4 +1,6 @@
 import React from "react";
+import * as Sentry from '@sentry/browser';
+import { auth } from '../configs/Firebase';
 
 interface Props { }
 
@@ -14,6 +16,16 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     }
 
     componentDidCatch(error: any, errorInfo: any) {
+        // Sentryにエラー情報を出力
+        Sentry.withScope(scope => {
+            scope.setExtras(errorInfo);
+            const user = auth.currentUser;
+            scope.setUser({
+                username: user?.displayName || 'name undefined',
+                email: user?.email || 'email undefined',
+            });
+            Sentry.captureException(error);
+        });
         this.setState({
             error: error,
             errorInfo: errorInfo

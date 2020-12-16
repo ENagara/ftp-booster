@@ -15,6 +15,7 @@ import ErrorBoundary from './src/components/ErrorBoundary';
 import Colors from './src/configs/Colors';
 import KittenTheme from './src/configs/KittenTheme';
 import { auth, dbh } from './src/configs/Firebase';
+import { sentryInit } from './src/configs/Sentry';
 
 const PaperTheme = {
   ...DefaultTheme,
@@ -27,6 +28,10 @@ const PaperTheme = {
 };
 
 const App = () => {
+  // Sentry初期化
+  sentryInit();
+
+  // コンテンツを表示
   return (
     <ErrorBoundary>
       <ApplicationProvider {...eva} theme={{ ...eva.light, ...KittenTheme }}>
