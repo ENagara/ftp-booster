@@ -96,11 +96,11 @@ const LoginForm = ({ switchLogin }: LoginFormProps) => {
                         default:
                             setError(() => { throw new Error(error) });
                     }
+                    // スピナー停止
+                    setWeitVisible(false);
                 } else {
-                    setError(() => { throw new Error(error) });
+                    setError(error);
                 }
-                // スピナー停止
-                setWeitVisible(false);
             });
     }
 

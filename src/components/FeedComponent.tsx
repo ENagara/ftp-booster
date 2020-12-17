@@ -39,12 +39,12 @@ const FeedComponent = ({ actionFlug }: FeedComponentProps) => {
             getFtpDataList().then(data => {
                 setFtpDataList(data);
             }).catch(error => {
-                setError(() => { throw new Error(error); });
+                setError(error);
             });
         }, [])
     );
 
-    /** 
+    /**
      * 一覧データ更新
      * 削除ダイアログを閉じたとき、ftp登録時
      */
@@ -53,7 +53,7 @@ const FeedComponent = ({ actionFlug }: FeedComponentProps) => {
             getFtpDataList().then(data => {
                 setFtpDataList(data);
             }).catch(error => {
-                setError(() => { throw new Error(error); });
+                setError(error);
             });
         }
     }, [deleteDialogVisible, actionFlug]);
@@ -68,7 +68,7 @@ const FeedComponent = ({ actionFlug }: FeedComponentProps) => {
         deleteFtpData(deleteItem.docId).then(() => {
             toggleDialog();
         }).catch(error => {
-            setError(() => { throw new Error(error); });
+            setError(error);
         });
     }
 

@@ -23,6 +23,8 @@ const GraphScreen = () => {
     const [dispData, setDispdata] = useState<PointDataParam[]>([]);
     const [orgFtpData, setOrgFtpData] = useState<FtpDataParam[]>([]);
 
+    const [, setError] = React.useState();
+
     /** 画面フォーカス判定 */
     const isFocused = useIsFocused();
 
@@ -80,7 +82,7 @@ const GraphScreen = () => {
                     }
                     return pointData;
                 }));
-            });
+            }).catch(error => setError(error));
         }, [])
     );
 

@@ -7,9 +7,9 @@ import { dbh, auth } from '../configs/Firebase';
 /** 記録した全データを取得（降順） */
 export const getFtpDataList = (): Promise<FtpDataParam[]> => {
     return new Promise((resolve, reject) => {
-        dbh.collection('users').doc(auth.currentUser?.uid).collection('ftpdata').orderBy('date', 'desc').get().then((snap) => {
+        dbh.collection('users').doc(auth.currentUser?.uid).collection('ftpdata').orderBy('date', 'desc').get().then(snap => {
             let result: FtpDataParam[] = [];
-            snap.forEach((doc) => {
+            snap.forEach(doc => {
                 result.push({
                     docId: doc.id,
                     no: doc.data().no,
@@ -22,9 +22,7 @@ export const getFtpDataList = (): Promise<FtpDataParam[]> => {
                 });
             });
             resolve(result);
-        }).catch((error) => {
-            reject(error);
-        });
+        }).catch(error => reject(error));
     });
 }
 
@@ -32,14 +30,14 @@ export const getFtpDataList = (): Promise<FtpDataParam[]> => {
 export const getWeightBefore = (): Promise<number> => {
     return new Promise((resolve, reject) => {
         dbh.collection('users').doc(auth.currentUser?.uid).collection('ftpdata')
-            .where('type', '==', 'ftp').orderBy('date', 'desc').limit(1).get().then((snap) => {
+            .where('type', '==', 'ftp').orderBy('date', 'desc').limit(1).get().then(snap => {
                 if (snap.docs.length === 0) {
                     resolve(-1);
                 } else {
                     resolve(snap.docs[0].data().weight);
                 }
-            }).catch((error) => {
-                reject(error);
+            }).catch(error => {
+                reject(() => { throw new Error(error) });
             });
     });
 }
@@ -54,7 +52,7 @@ export const entryFtp = (ftpData: FtpDataParam) => {
                 resolve();
             })
             .catch(error => {
-                reject(error);
+                reject(() => { throw new Error(error) });
             });
     });
 }
@@ -71,7 +69,7 @@ export const getFtpSeqIncrement = (): Promise<number> => {
                 resolve(snap.get('ftpseq') + 1);
             }
         }).catch(error => {
-            reject(error);
+            reject(() => { throw new Error(error) });
         });
     });
 }
@@ -84,7 +82,7 @@ export const updateFtpSeq = (no: number): Promise<number> => {
         }, { merge: true }).then(() => {
             resolve(no);
         }).catch(error => {
-            reject(error);
+            reject(() => { throw new Error(error) });
         });
     });
 }
@@ -102,7 +100,7 @@ export const insertFtpData = (no: number, ftpData: FtpDataParam): Promise<void> 
         }).then(() => {
             resolve();
         }).catch(error => {
-            reject(error);
+            reject(() => { throw new Error(error) });
         });
     });
 }
@@ -114,7 +112,7 @@ export const deleteFtpData = (docId: string): Promise<void> => {
             .then(() => {
                 resolve();
             }).catch(error => {
-                reject(error);
+                reject(() => { throw new Error(error) });
             });
     });
 }

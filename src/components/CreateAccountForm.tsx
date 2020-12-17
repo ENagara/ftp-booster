@@ -123,16 +123,19 @@ const CreateAccountForm = ({ switchLogin }: CreateAccountFormProps) => {
                             setEmailMessage('登録済みのメールアドレスです');
                             break;
                         case 'auth/weak-password':
-                            setEmailMessage('脆弱なパスワードです');
+                            setPasswordMessage('脆弱なパスワードです');
+                            break;
+                        case 'auth/invalid-email':
+                            setEmailMessage('メールアドレスを入力してください');
                             break;
                         default:
                             setError(() => { throw new Error(error) });
                     }
+                    // スピナー停止
+                    setWeitVisible(false);
                 } else {
-                    setError(() => { throw new Error(error) });
+                    setError(error);
                 }
-                // スピナー停止
-                setWeitVisible(false);
             });
     }
 
