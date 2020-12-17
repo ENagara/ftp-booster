@@ -1,6 +1,8 @@
+import firebase from 'firebase/app';
+
+/** configs */
 import { FtpDataParam } from '../configs/Types';
 import { dbh, auth } from '../configs/Firebase';
-import firebase from 'firebase';
 
 /** 記録した全データを取得（降順） */
 export const getFtpDataList = (): Promise<FtpDataParam[]> => {
