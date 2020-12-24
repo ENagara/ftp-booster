@@ -2,7 +2,7 @@
   "expo": {
     "name": "ftp-booster",
     "slug": "ftp-booster",
-    "version": "1.0.0",
+    "version": "DEV",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -19,7 +19,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.nei.ftpbooster",
-      "buildNumber": "1.0.0"
+      "buildNumber": "DEV"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -30,7 +30,7 @@
     },
     "extra": {
       "dsn": "https://cadc3509b7204ab9978ac15294bd359c@o488226.ingest.sentry.io/5548273",
-      "environment": "production"
+      "environment": "development"
     }
   }
 }

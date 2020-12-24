@@ -1,14 +1,28 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
-    "start:firebase": "firebase serve",
+    "start": "expo start --config app.dev.json",
     "build:android": "expo build:android -t apk",
     "build:ios": "expo build:ios -t archive",
-    "build:web": "expo build:web",
-    "deploy:web": "firebase deploy",
-    "web": "npm run build:web && npm run deploy:web",
+    "build:web:prod": "expo build:web",
+    "build:web:dev": "expo build:web --config app.dev.json",
+    "deploy:web:prod": "firebase deploy",
+    "deploy:web:dev": "firebase hosting:channel:deploy DEV",
+
+    "_sentry:upload":"sentryにsourcemapsをアップロード",
+    "sentry:upload:prod": "cross-conf-env sentry-cli releases files npm_package_config_version upload-sourcemaps --ext js --ext map web-build",
+    "sentry:upload:dev": "cross-conf-env sentry-cli releases files DEV upload-sourcemaps --ext js --ext map web-build",
+
+    "_release": "ビルドからデプロイまで実行",
+    "release:prod": "run-s build:web:prod deploy:web:prod sentry:upload:prod",
+    "release:dev": "run-s build:web:dev  deploy:web:dev sentry:upload:dev",
+
+    "_firebase:saveindex": "firestoreで作成したindexをfirestore.indexes.jsonに反映",
     "firebase:saveindex": "firebase firestore:indexes > firestore.indexes.json"
+  },
+  "config": {
+    "_version": "本番のバージョン設定 app.jsonのversionも合わせる",
+    "version": "1.0.0"
   },
   "dependencies": {
     "@eva-design/eva": "^1.4.0",
@@ -46,6 +60,8 @@
     "@types/firebase": "^3.2.1",
     "@types/react": "^16.9.49",
     "@types/react-native": "^0.63.23",
+    "cross-conf-env": "^1.2.1",
+    "npm-run-all": "^4.1.5",
     "typescript": "^4.0.3"
   },
   "private": true

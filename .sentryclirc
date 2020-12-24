@@ -1,5 +1,5 @@
 [auth]
 token=YourSentryAPIAuthToken
 [defaults]
-org=YourSentryOrganization
-project=YourSentryProject
+org=ftpbooster
+project=ftpbooster
