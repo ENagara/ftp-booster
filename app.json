@@ -29,7 +29,7 @@
       "versionCode": 1
     },
     "extra": {
-      "dsn": "https://cadc3509b7204ab9978ac15294bd359c@o488226.ingest.sentry.io/5548273",
+      "dsn": "yourSentryDSN",
       "environment": "production"
     }
   }
