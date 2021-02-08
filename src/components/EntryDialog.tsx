@@ -96,6 +96,7 @@ const EntryContainer = ({ action }: EntryContainerProp) => {
         setWeitVisible(true);
 
         const ftpData: FtpDataParam = {
+            docId: '', // TODO:
             no: 0, // ダミーの番号（後に採番）
             date: date,
             type: DataTypeParam.FTP,

@@ -47,7 +47,7 @@ const BottomNavigation = () => {
 
 
 /** AntDesignアイコン読み込み */
-const getTabNavigatorIcon = (name: string) => ({ color, size }: {
+const getTabNavigatorIcon = (name: 'home' | 'linechart' | 'setting') => ({ color, size }: {
   color: string;
   size: number;
 }) => <AntDesign name={name} color={color} size={size} />;

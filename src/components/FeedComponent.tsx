@@ -144,7 +144,7 @@ const ListIcon = ({ item }: ListIconProps) => {
 }
 
 type ListAntDesignIconProps = {
-    name: string,
+    name: 'smileo' | 'meh' | 'star' | 'frowno',
     color: string,
 }
 /** AntDesignアイコン */
