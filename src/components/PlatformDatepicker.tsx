@@ -48,7 +48,7 @@ const WebCalendar = ({ selectDate }: Props) => {
             date={date}
             size='large'
             placeholder='Large'
-            icon={CalendarIcon}
+            accessoryRight={CalendarIcon}
             onSelect={selectDate => OnSelectDate(selectDate)}
             dateService={dateService}
             min={new Date('2000-01-01')}

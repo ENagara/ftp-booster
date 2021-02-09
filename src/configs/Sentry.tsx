@@ -1,12 +1,11 @@
-import * as Sentry from '@sentry/browser';
+import * as Sentry from 'sentry-expo';
 import Constants from 'expo-constants';
-import { Integrations } from '@sentry/tracing';
 
 export const sentryInit = () => {
     Sentry.init({
-        dsn: Constants.manifest.extra.dsn,
-        integrations: [new Integrations.BrowserTracing()],
-        tracesSampleRate: 1.0,
+        dsn: "your sencry dsn here",
+        enableInExpoDevelopment: true,
+        debug: true,
         release: Constants.manifest.version,
         environment: Constants.manifest.extra.environment
     });

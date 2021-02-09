@@ -1,5 +1,6 @@
 import React from "react";
-import * as Sentry from '@sentry/browser';
+import * as Sentry from 'sentry-expo';
+import { StyleSheet, View, Text } from 'react-native';
 import { auth } from '../configs/Firebase';
 
 interface Props { }
@@ -17,15 +18,18 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 
     componentDidCatch(error: any, errorInfo: any) {
         // Sentryにエラー情報を出力
-        Sentry.withScope(scope => {
+
+        // 不具合となっているので一旦コメントアウト
+        // https://github.com/expo/sentry-expo/issues/165
+        /*Sentry.Native.withScope(scope => {
             scope.setExtras(errorInfo);
             const user = auth.currentUser;
             scope.setUser({
                 username: user?.displayName || 'name undefined',
                 email: user?.email || 'email undefined',
             });
-            Sentry.captureException(error);
-        });
+            Sentry.Native.captureException(error);
+        }); */
         this.setState({
             error: error,
             errorInfo: errorInfo
@@ -36,15 +40,22 @@ export default class ErrorBoundary extends React.Component<Props, State> {
         if (this.state.errorInfo) {
             // Error path
             return (
-                <div>
-                    <h2>予期しない例外が発生しました。</h2>
-                    <h2>申し訳ありません。</h2>
-                    <p>{this.state.error && this.state.error.toString()}</p>
-                    <p>もう一度操作をしても、状況が変わらない場合はお問い合わせください。</p>
-                </div>
+                <View style={styles.center}>
+                    <Text>予期しない例外が発生しました。{"\n"}申し訳ありません。</Text>
+                    <Text>{"\n"}</Text>
+                    <Text>もう一度操作をしても、状況が変わらない場合はお問い合わせください。</Text>
+                    <Text>{"\n\n"}</Text>
+                    <Text>{this.state.error && this.state.error.toString()}</Text>
+                </View>
             );
         }
         // Normally, just render children
         return this.props.children;
     }
 }
+const styles = StyleSheet.create({
+    center: {
+        flex: 1,
+        justifyContent: 'center',
+    },
+});

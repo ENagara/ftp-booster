@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
-import { List, Layout, Text } from '@ui-kitten/components';
-import { StyleSheet, ScrollView } from 'react-native';
+import { Layout, Text } from '@ui-kitten/components';
+import { StyleSheet, FlatList } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -94,8 +94,8 @@ const FeedComponent = ({ actionFlug }: FeedComponentProps) => {
     );
 
     return (
-        <ScrollView>
-            <List
+        <>
+            <FlatList
                 data={ftpDataList}
                 renderItem={renderItem}
             />
@@ -105,7 +105,7 @@ const FeedComponent = ({ actionFlug }: FeedComponentProps) => {
                 visible={getDeleteDialogVisible()}
                 action={deleteAction}
             />
-        </ScrollView>
+        </>
     );
 };
 
