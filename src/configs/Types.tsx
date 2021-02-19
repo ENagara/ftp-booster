@@ -58,7 +58,7 @@ export const GraphState = {
 export type GraphState = typeof GraphState[keyof typeof GraphState];
 
 export type PointDataParam = {
-  x: Date
+  x: number // milliseconds
   y: number,
   ftp: number,
   weight: number,

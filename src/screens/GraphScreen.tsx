@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Tab, TabView } from '@ui-kitten/components';
 import { useFocusEffect } from '@react-navigation/native';
 import { Text } from 'react-native-paper';
@@ -73,7 +73,7 @@ const GraphScreen = () => {
                     return sixMonthAgo < item.date;
                 }).map(item => {
                     const pointData: PointDataParam = {
-                        x: item.date,
+                        x: item.date.getTime(),
                         y: Number(item.ftp),
                         ftp: Number(item.ftp),
                         weight: Number(item.weight),
@@ -121,7 +121,7 @@ const GraphScreen = () => {
             return peropd < item.date;
         }).map(item => {
             const pointData: PointDataParam = {
-                x: item.date,
+                x: item.date.getTime(),
                 y: chouseY(Number(item.ftp), Number(item.weight)),
                 ftp: Number(item.ftp),
                 weight: Number(item.weight),
@@ -184,9 +184,7 @@ const GraphScreen = () => {
                     {
                         dispData.length === 0
                             ? <Text>この期間にデータが登録されていません。</Text>
-                            : <View style={styles.lineChart}>
-                                <LineChart dispData={dispData}></LineChart>
-                            </View>
+                            : <LineChart dispData={dispData}></LineChart>
                     }
                 </>
             )
@@ -194,9 +192,6 @@ const GraphScreen = () => {
 }
 
 const styles = StyleSheet.create({
-    lineChart: {
-        margin: 16
-    },
     tab: {
         height: 50
     }
