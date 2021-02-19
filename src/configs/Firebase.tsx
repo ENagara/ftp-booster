@@ -6,7 +6,7 @@ const firebaseConfig = {
     apiKey: 'apiKey',
     authDomain: 'authDomain',
     databaseURL: 'databaseURL',
-    projectId: 'projectId',
+    projectId: 'ftpbooster',
     storageBucket: 'storageBucket',
     messagingSenderId: 'messagingSenderId',
     appId: 'appId',
