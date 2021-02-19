@@ -1,5 +1,18 @@
 import { dbh, auth } from '../configs/Firebase';
 
+/** firestoreに指定のユーザ情報が存在するか */
+export const searchFirestoreUserExists = (uid: string) => {
+    return new Promise((resolve) => {
+        dbh.collection('users').doc(uid).get().then((doc) => {
+            if (doc.exists) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        })
+    });
+}
+
 /** firebaseにユーザを作成 */
 export const createFirebaseUser = (name: string, email: string, password: string) => {
     return new Promise((resolve, reject) => {
