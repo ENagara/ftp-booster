@@ -49,7 +49,7 @@ const js = `
             yAxes: [{
                 scaleLabel: {
                     display: true,
-                    labelString: 'FTP[W]'
+                    labelString: '[INJECTED_DATALABEL]'
                 },
                 ticks: {
                     beginAtZero: true
@@ -64,10 +64,10 @@ const js = `
                 beforeBody: function(tooltipItem, data) {
                     var pointedData = data.datasets[tooltipItem[0].datasetIndex].data[tooltipItem[0].index];
                     var date = new Date(pointedData.x);
-                    return '記録日時: ' + moment(pointedData.x).format("YYYY/M/D h:mm") + '\\n'
+                    return '記録日時: ' + moment(pointedData.x).format("YYYY/M/D") + '\\n'
                      + 'FTP: ' + pointedData.ftp + ' W\\n'
-                     + '体重: ' + pointedData.weight + ' kg\\n'
-                     + 'PWR: ' + pointedData.pwr + ' W/kg\\n'
+                     + '体重: ' + pointedData.weight.toFixed(1) + ' kg\\n'
+                     + 'PWR: ' + pointedData.pwr.toFixed(1) + ' W/kg\\n'
                      + 'コンディション: ' + pointedData.condition;
                 },
                 label: function() {
@@ -89,66 +89,12 @@ const js = `
     });
       `;
 
-const options = {
-    scales: {
-        xAxes: [{
-            type: 'time',
-            time: {
-                unit: 'day',
-                displayFormats: {
-                    day: 'YYYY/M/D'
-                }
-            },
-            ticks: {
-                maxTicksLimit: 12
-            }
-        }],
-        yAxes: [{
-            scaleLabel: {
-                display: true,
-                labelString: 'FTP[W]'
-            },
-            ticks: {
-                beginAtZero: true
-            }
-        }]
-    },
-    // ツールチップ
-    tooltips: {
-        callbacks: {
-            // タイトルを削除
-            title: () => {
-                return '';
-            },
-            // 中身を編集
-            beforeBody: (tooltipItem: any, data: any) => {
-                const pointedData = data.datasets[tooltipItem[0].datasetIndex].data[tooltipItem[0].index];
-                const date = new Date(pointedData.x);
-                return '記録日時: ' + date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + '\n'
-                    + 'FTP: ' + pointedData.ftp + ' W\n'
-                    + '体重: ' + pointedData.weight + ' kg\\n'
-                    + 'PWR: ' + pointedData.pwr + ' W/kg\n'
-                    + 'コンディション: ' + pointedData.condition;
-            },
-            // ラベルを削除
-            label: () => {
-                return '';
-            }
-        },
-        bodyFontSize: 15
-    },
-    legend: {
-        // 凡例を表示しない
-        display: false,
-    },
-    maintainAspectRatio: false
-}
-
 type LineChartProps = {
     dispData: PointDataParam[],
+    dataLabel: string,
 }
 
-const LineChart: React.FC<LineChartProps> = ({ dispData }: LineChartProps) => {
+const LineChart: React.FC<LineChartProps> = ({ dispData, dataLabel }: LineChartProps) => {
 
     if (Platform.OS == 'web') {
         const data = {
@@ -169,6 +115,60 @@ const LineChart: React.FC<LineChartProps> = ({ dispData }: LineChartProps) => {
                 }
             ]
         };
+        const options = {
+            scales: {
+                xAxes: [{
+                    type: 'time',
+                    time: {
+                        unit: 'day',
+                        displayFormats: {
+                            day: 'YYYY/M/D'
+                        }
+                    },
+                    ticks: {
+                        maxTicksLimit: 12
+                    }
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: dataLabel
+                    },
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+            // ツールチップ
+            tooltips: {
+                callbacks: {
+                    // タイトルを削除
+                    title: () => {
+                        return '';
+                    },
+                    // 中身を編集
+                    beforeBody: (tooltipItem: any, data: any) => {
+                        const pointedData = data.datasets[tooltipItem[0].datasetIndex].data[tooltipItem[0].index];
+                        const date = new Date(pointedData.x);
+                        return '記録日時: ' + date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + '\n'
+                            + 'FTP: ' + pointedData.ftp + ' W\n'
+                            + '体重: ' + pointedData.weight.toFixed(1) + ' kg\n'
+                            + 'PWR: ' + pointedData.pwr.toFixed(1) + ' W/kg\n'
+                            + 'コンディション: ' + pointedData.condition;
+                    },
+                    // ラベルを削除
+                    label: () => {
+                        return '';
+                    }
+                },
+                bodyFontSize: 15
+            },
+            legend: {
+                // 凡例を表示しない
+                display: false,
+            },
+            maintainAspectRatio: false
+        }
 
         return (
             <div style={{ height: '60vh', width: '90vw' }}>
@@ -178,7 +178,7 @@ const LineChart: React.FC<LineChartProps> = ({ dispData }: LineChartProps) => {
     }
     else {
         const strDispData = JSON.stringify(dispData);
-        const replaseJs = js.replace('[INJECTED_DATA]', strDispData);
+        const replaseJs = js.replace('[INJECTED_DATA]', strDispData).replace('[INJECTED_DATALABEL]', dataLabel);
         const replaseHtmlContent = htmlContent.replace('[INJECTED_SCRIPT]', replaseJs);
 
         return (

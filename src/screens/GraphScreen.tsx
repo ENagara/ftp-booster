@@ -19,7 +19,8 @@ import { FtpDataParam, DataTypeParam, PointDataParam, GraphState } from '../conf
 const GraphScreen = () => {
     const [graphState, setGraphState] = React.useState<GraphState>(GraphState.Loading);
     const [periodIndex, setPeriodIndex] = useState<number>(1);
-    const [dataOptinoIndex, setDataOptinoIndex] = useState<number>(0);
+    const [dataOptionIndex, setDataOptionIndex] = useState<number>(0);
+    const [dataLabel, setDataLabel] = useState<string>('FTP[W]');
     const [dispData, setDispdata] = useState<PointDataParam[]>([]);
     const [orgFtpData, setOrgFtpData] = useState<FtpDataParam[]>([]);
 
@@ -37,10 +38,10 @@ const GraphScreen = () => {
     }
 
     /** データ種類タブ選択 */
-    const setSelectedDataOptino = (index: number) => {
+    const setSelectedDataOption = (index: number) => {
         // GraphScreenを表示中の場合実行
         if (isFocused) {
-            setDataOptinoIndex(index);
+            setDataOptionIndex(index);
         }
     }
 
@@ -65,7 +66,7 @@ const GraphScreen = () => {
                 // 期間：6か月間を選択
                 setPeriodIndex(1);
                 // データ種類：FTPを選択
-                setDataOptinoIndex(0);
+                setDataOptionIndex(0);
                 // 6か月前までのデータに絞る
                 const sixMonthAgo = new Date();
                 sixMonthAgo.setMonth(sixMonthAgo.getMonth() - 6);
@@ -89,12 +90,15 @@ const GraphScreen = () => {
     /** グラフの再表示 */
     useEffect(() => {
         const chouseY = (ftp: number, weight: number) => {
-            switch (dataOptinoIndex) {
+            switch (dataOptionIndex) {
                 case 0: // ftp
+                    setDataLabel('FTP[W]');
                     return ftp;
                 case 1: // PWR
+                    setDataLabel('PWR[W/kg]');
                     return Math.round(ftp / weight * 10) / 10;
                 default: // weight
+                    setDataLabel('体重[kg]');
                     return weight;
             }
         }
@@ -130,7 +134,7 @@ const GraphScreen = () => {
             }
             return pointData;
         }));
-    }, [periodIndex, dataOptinoIndex]);
+    }, [periodIndex, dataOptionIndex]);
 
     // ロード状態によって表示を変更
     switch (graphState) {
@@ -169,8 +173,8 @@ const GraphScreen = () => {
                     </TabView>
 
                     <TabView
-                        selectedIndex={dataOptinoIndex}
-                        onSelect={setSelectedDataOptino}>
+                        selectedIndex={dataOptionIndex}
+                        onSelect={setSelectedDataOption}>
                         <Tab title='FTP' style={styles.tab}>
                             <></>
                         </Tab>
@@ -184,7 +188,7 @@ const GraphScreen = () => {
                     {
                         dispData.length === 0
                             ? <Text>この期間にデータが登録されていません。</Text>
-                            : <LineChart dispData={dispData}></LineChart>
+                            : <LineChart dispData={dispData} dataLabel={dataLabel}></LineChart>
                     }
                 </>
             )
