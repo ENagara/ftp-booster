@@ -62,9 +62,7 @@ type EntryContainerProp = {
 }
 const EntryContainer = ({ action }: EntryContainerProp) => {
     const [date, setDate] = useState(new Date());
-    const [selectInputKind, setSelectInputKind] = useState(0);
     const [ftp, setFtp] = useState('');
-    const [ftp20power, setFtp20power] = useState('');
     const [weight, setWeight] = useState('');
     const [condition, setCondition] = useState<ConditionParam>(ConditionParam.GOOD);
     const [conditionOption,] = useState<ConditionOption[]>(initConditionOption);
@@ -88,8 +86,7 @@ const EntryContainer = ({ action }: EntryContainerProp) => {
     const entryAction = async () => {
         setOperationDirty(true);
         // 入力エラーがある場合処理しない
-        if ((selectInputKind === 0 && isIntegerError(ftp)) || (selectInputKind === 1 && isIntegerError(ftp20power))
-            || isWeightError()) {
+        if (isIntegerError(ftp) || isWeightError()) {
             return;
         }
         // スピナー開始
@@ -109,7 +106,7 @@ const EntryContainer = ({ action }: EntryContainerProp) => {
         entryFtp(ftpData).then(() => {
             setWeitVisible(false);
             action(true);
-        }).catch(error =>{
+        }).catch(error => {
             setError(() => { throw new Error(error); });
         });
     }
@@ -169,38 +166,16 @@ const EntryContainer = ({ action }: EntryContainerProp) => {
 
                 <View style={styles.contents}>
                     <Text>FTP</Text>
-                    <TabView
-                        selectedIndex={selectInputKind}
-                        onSelect={setSelectInputKind}>
-                        <Tab title='直接入力'>
-                            <>
-                                <TextInput
-                                    placeholder='FTPを入力[W]'
-                                    value={ftp}
-                                    onChangeText={setFtp}
-                                    keyboardType='numeric'
-                                    maxLength={4}
-                                />
-                                <HelperText type="error" visible={isIntegerError(ftp) && operationDirty}>
-                                    半角で整数を入力してください。ex) 220
-                                </HelperText>
-                            </>
-                        </Tab>
-                        <Tab title='20分測定'>
-                            <>
-                                <TextInput
-                                    placeholder='20分の平均パワーを入力[W]'
-                                    value={ftp20power}
-                                    onChangeText={setFtp20power}
-                                    keyboardType='numeric'
-                                    maxLength={4}
-                                />
-                                <HelperText type="error" visible={isIntegerError(ftp20power) && operationDirty}>
-                                    半角で整数を入力してください。ex) 230
-                                </HelperText>
-                            </>
-                        </Tab>
-                    </TabView>
+                    <TextInput
+                        placeholder='FTPを入力[W]'
+                        value={ftp}
+                        onChangeText={setFtp}
+                        keyboardType='numeric'
+                        maxLength={4}
+                    />
+                    <HelperText type="error" visible={isIntegerError(ftp) && operationDirty}>
+                        半角で整数を入力してください。ex) 220
+                    </HelperText>
                 </View>
 
                 <View style={styles.contents}>
@@ -253,7 +228,6 @@ const styles = StyleSheet.create({
         margin: 16
     },
     contents: {
-        marginTop: 16,
         marginBottom: 16
     },
     leftMargin: {
