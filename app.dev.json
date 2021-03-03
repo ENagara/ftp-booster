@@ -35,6 +35,7 @@
           "config": {
             "organization": "ftpbooster",
             "project": "ftpbooster",
+            "authToken": "YourSentryAuthToken"
           }
         }
       ]
