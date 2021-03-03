@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Platform, StyleSheet } from 'react-native';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { Button, Datepicker, NativeDateService, I18nConfig } from '@ui-kitten/components';
+import { StyleSheet } from 'react-native';
+import { Datepicker, NativeDateService, I18nConfig } from '@ui-kitten/components';
 import { AntDesign } from '@expo/vector-icons';
 
 const i18n: I18nConfig = {
@@ -24,17 +23,6 @@ type Props = {
  * プラットフォーム別Datepicker
  */
 const PlatformDatepicker = ({ selectDate }: Props) => {
-    if (Platform.OS === 'web') {
-        return <WebCalendar selectDate={selectDate}></WebCalendar>
-    } else {
-        return <PhoneCalendar selectDate={selectDate}></PhoneCalendar>
-    }
-}
-
-/**
- * Web用Datepicker
- */
-const WebCalendar = ({ selectDate }: Props) => {
     const [date, setDate] = useState(new Date());
 
     const OnSelectDate = (date: Date) => {
@@ -54,51 +42,6 @@ const WebCalendar = ({ selectDate }: Props) => {
             min={new Date('2000-01-01')}
             max={new Date()}
         />
-    );
-}
-
-/**
- * Phone用Datepicker
- */
-const PhoneCalendar = ({ selectDate }: Props) => {
-    const [date, setDate] = useState(new Date());
-    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
-    const showDatePicker = () => {
-        setDatePickerVisibility(true);
-    };
-
-    const hideDatePicker = () => {
-        setDatePickerVisibility(false);
-    };
-
-    const handleConfirm = (date: Date) => {
-        setDate(date);
-        selectDate(date);
-        hideDatePicker();
-    };
-
-    const getDateFormatString = () => {
-        return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-    }
-
-    return (
-        <>
-            <Button onPress={showDatePicker}
-                appearance='ghost'
-                status='basic'
-                size='large'
-                style={styles.calendarButton}
-            >
-                {getDateFormatString()}
-            </Button>
-            <DateTimePickerModal
-                isVisible={isDatePickerVisible}
-                mode='date'
-                onConfirm={handleConfirm}
-                onCancel={hideDatePicker}
-            />
-        </>
     );
 }
 
