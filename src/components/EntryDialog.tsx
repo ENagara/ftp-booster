@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, TextInput, HelperText, Portal, Dialog, FAB, Text } from 'react-native-paper';
-import { Tab, TabView } from '@ui-kitten/components';
 import { AntDesign } from '@expo/vector-icons';
-import PlatformDatepicker from './PlatformDatepicker';
+import Datepicker from './Datepicker';
 
 /** actions */
 import { getWeightBefore, entryFtp } from '../actions/FtpDataAction';
@@ -161,7 +160,7 @@ const EntryContainer = ({ action }: EntryContainerProp) => {
             <View style={styles.container}>
                 <View style={styles.contents}>
                     <Text>計測日</Text>
-                    <PlatformDatepicker selectDate={setDate}></PlatformDatepicker>
+                    <Datepicker selectDate={setDate}></Datepicker>
                 </View>
 
                 <View style={styles.contents}>
