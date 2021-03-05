@@ -137,17 +137,23 @@ const EntryContainer = ({ action }: EntryContainerProp) => {
             <View style={styles.container}>
                 <View style={styles.contents}>
                     <Text>計測日</Text>
-                    <Datepicker selectDate={setDate}></Datepicker>
+                    <View style={styles.picker}>
+                        <Datepicker selectDate={setDate}></Datepicker>
+                    </View>
                 </View>
 
                 <View style={styles.contents}>
                     <Text>FTP</Text>
-                    <Ftppicker selectFtp={setFtp}></Ftppicker>
+                    <View style={styles.picker}>
+                        <Ftppicker selectFtp={setFtp}></Ftppicker>
+                    </View>
                 </View>
 
                 <View style={styles.contents}>
                     <Text>体重</Text>
-                    <Weightpicker selectWeight={setWeight}></Weightpicker>
+                    <View style={styles.picker}>
+                        <Weightpicker selectWeight={setWeight}></Weightpicker>
+                    </View>
                 </View>
 
                 <View style={styles.contents}>
@@ -210,6 +216,12 @@ const styles = StyleSheet.create({
     divider: {
         backgroundColor: Colors.tint
     },
+    picker: {
+        overflow: 'hidden',
+        height: 100,
+        display: 'flex',
+        justifyContent: 'center'
+    }
 });
 
 export default EntryDialog;
