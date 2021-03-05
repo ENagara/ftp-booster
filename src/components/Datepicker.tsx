@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text } from 'react-native';
 
 import 'rmc-picker/assets/index.css';
 import 'rmc-picker/assets/popup.css';
@@ -72,34 +72,24 @@ const Datepicker = ({ selectDate }: Props) => {
         selectDate(new Date(changeValue[0], changeValue[2] - 1, changeValue[4]))
     }
     return (
-        <View style={styles.datepicker}>
-            <MultiPicker
-                selectedValue={selectedDate}
-                onValueChange={onChange}>
-                <Picker>
-                    {yearList.map(year => { return (<Picker.Item value={year} key={year} >{year}</Picker.Item>) })}
-                </Picker>
-                <Text>年</Text>
-                <Picker>
-                    {monthList.map(month => { return (<Picker.Item value={month} key={month} >{month}</Picker.Item>) })}
-                </Picker>
-                <Text>月</Text>
-                <Picker>
-                    {dayList.map(day => { return (<Picker.Item value={day} key={day} >{day}</Picker.Item>) })}
-                </Picker>
-                <Text>日</Text>
-            </MultiPicker>
-        </View>
+        <MultiPicker
+            selectedValue={selectedDate}
+            onValueChange={onChange}>
+            <Picker>
+                {yearList.map(year => { return (<Picker.Item value={year} key={year} >{year}</Picker.Item>) })}
+            </Picker>
+            <Text>年</Text>
+            <Picker>
+                {monthList.map(month => { return (<Picker.Item value={month} key={month} >{month}</Picker.Item>) })}
+            </Picker>
+            <Text>月</Text>
+            <Picker>
+                {dayList.map(day => { return (<Picker.Item value={day} key={day} >{day}</Picker.Item>) })}
+            </Picker>
+            <Text>日</Text>
+        </MultiPicker>
+
     );
 }
-
-const styles = StyleSheet.create({
-    datepicker: {
-        overflow: 'hidden',
-        height: 100,
-        display: 'flex',
-        justifyContent: 'center'
-    }
-});
 
 export default Datepicker;

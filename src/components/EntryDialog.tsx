@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, TextInput, HelperText, Portal, Dialog, FAB, Text } from 'react-native-paper';
+import { Button, Portal, Dialog, FAB, Text, Divider } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
-import Datepicker from './Datepicker';
 
 /** actions */
-import { getWeightBefore, entryFtp } from '../actions/FtpDataAction';
+import { entryFtp } from '../actions/FtpDataAction';
 
 /** components */
 import WaitDialog from './WaitDialog';
+import Datepicker from './Datepicker';
+import Ftppicker from './Ftppicker';
+import Weightpicker from './Weightpicker';
 
-/** types */
+/** configs */
 import { FtpDataParam, DataTypeParam, ConditionParam } from '../configs/Types';
+import Colors from '../configs/Colors';
 
 /** コンディションのオプション */
 type ConditionOption = {
@@ -46,10 +49,12 @@ const EntryDialog = ({ action }: EntryDialogProps) => {
             />
             <Portal>
                 <Dialog
+                    style={styles.dialog}
                     onDismiss={() => setVisible(false)}
                     visible={getVisible()}
                     dismissable={false}>
                     <EntryContainer action={entryAction}></EntryContainer>
+
                 </Dialog>
             </Portal>
         </>
@@ -61,33 +66,16 @@ type EntryContainerProp = {
 }
 const EntryContainer = ({ action }: EntryContainerProp) => {
     const [date, setDate] = useState(new Date());
-    const [ftp, setFtp] = useState('');
-    const [weight, setWeight] = useState('');
+    const [ftp, setFtp] = useState(0);
+    const [weight, setWeight] = useState(0);
     const [condition, setCondition] = useState<ConditionParam>(ConditionParam.GOOD);
     const [conditionOption,] = useState<ConditionOption[]>(initConditionOption);
 
     const [waitVisible, setWeitVisible] = React.useState(false);
-    const [operationDirty, setOperationDirty] = React.useState(false);
     const [, setError] = React.useState();
-
-    /** 前回登録した体重を初期表示 */
-    useEffect(() => {
-        getWeightBefore().then(weight => {
-            if (weight > 0) {
-                setWeight(weight.toString());
-            }
-        }).catch(error => {
-            setError(() => { throw new Error(error); });
-        });
-    }, []);
 
     /** 登録ボタン押下 */
     const entryAction = async () => {
-        setOperationDirty(true);
-        // 入力エラーがある場合処理しない
-        if (isIntegerError(ftp) || isWeightError()) {
-            return;
-        }
         // スピナー開始
         setWeitVisible(true);
 
@@ -96,8 +84,8 @@ const EntryContainer = ({ action }: EntryContainerProp) => {
             no: 0, // ダミーの番号（後に採番）
             date: date,
             type: DataTypeParam.FTP,
-            ftp: Number.parseInt(ftp),
-            weight: Number.parseFloat(weight),
+            ftp: ftp,
+            weight: weight,
             condition: condition
         }
 
@@ -123,18 +111,6 @@ const EntryContainer = ({ action }: EntryContainerProp) => {
         });
     }
 
-    /** 整数チェック */
-    const integerRegexp = new RegExp(/^[1-9]\d*$/);
-    const isIntegerError = (number: string) => {
-        return !integerRegexp.test(number);
-    };
-
-    /** 体重チェック */
-    const weightRegexp = new RegExp(/^[1-9]\d*(|\.\d)$/);
-    const isWeightError = () => {
-        return !weightRegexp.test(weight);
-    };
-
     /** コンディションボタングループ */
     const ConditionButtonGroup = () => {
         return (
@@ -155,8 +131,9 @@ const EntryContainer = ({ action }: EntryContainerProp) => {
     }
 
     return (
-        <>
-            <Dialog.Title>計測値を登録</Dialog.Title>
+        <View>
+            <Dialog.Title style={styles.dialogTitle}>計測値を登録</Dialog.Title>
+            <Divider style={styles.divider}></Divider>
             <View style={styles.container}>
                 <View style={styles.contents}>
                     <Text>計測日</Text>
@@ -165,30 +142,12 @@ const EntryContainer = ({ action }: EntryContainerProp) => {
 
                 <View style={styles.contents}>
                     <Text>FTP</Text>
-                    <TextInput
-                        placeholder='FTPを入力[W]'
-                        value={ftp}
-                        onChangeText={setFtp}
-                        keyboardType='numeric'
-                        maxLength={4}
-                    />
-                    <HelperText type="error" visible={isIntegerError(ftp) && operationDirty}>
-                        半角で整数を入力してください。ex) 220
-                    </HelperText>
+                    <Ftppicker selectFtp={setFtp}></Ftppicker>
                 </View>
 
                 <View style={styles.contents}>
                     <Text>体重</Text>
-                    <TextInput
-                        placeholder='体重を入力[kg]'
-                        value={weight}
-                        onChangeText={setWeight}
-                        keyboardType='numeric'
-                        maxLength={5}
-                    />
-                    <HelperText type="error" visible={isWeightError() && operationDirty}>
-                        半角数字で入力してください。ex) 62.3
-                    </HelperText>
+                    <Weightpicker selectWeight={setWeight}></Weightpicker>
                 </View>
 
                 <View style={styles.contents}>
@@ -212,7 +171,7 @@ const EntryContainer = ({ action }: EntryContainerProp) => {
                 </Button>
             </Dialog.Actions>
             <WaitDialog visible={waitVisible}></WaitDialog>
-        </>
+        </View>
     );
 }
 
@@ -223,11 +182,18 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
     },
+    dialog: {
+        marginHorizontal: 4
+    },
+    dialogTitle: {
+        marginVertical: 8
+    },
     container: {
-        margin: 16
+        marginHorizontal: 16,
+        marginVertical: 4
     },
     contents: {
-        marginBottom: 16
+        marginBottom: 4
     },
     leftMargin: {
         marginLeft: 32
@@ -240,7 +206,10 @@ const styles = StyleSheet.create({
     },
     buttonFlex: {
         flexGrow: 1
-    }
+    },
+    divider: {
+        backgroundColor: Colors.tint
+    },
 });
 
 export default EntryDialog;

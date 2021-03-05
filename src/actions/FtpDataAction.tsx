@@ -26,8 +26,8 @@ export const getFtpDataList = (): Promise<FtpDataParam[]> => {
     });
 }
 
-/** 前回の体重を取得 */
-export const getWeightBefore = (): Promise<number> => {
+/** 直近の体重を取得 */
+export const getPastWeight = (): Promise<number> => {
     return new Promise((resolve, reject) => {
         dbh.collection('users').doc(auth.currentUser?.uid).collection('ftpdata')
             .where('type', '==', 'ftp').orderBy('date', 'desc').limit(1).get().then(snap => {
@@ -35,6 +35,22 @@ export const getWeightBefore = (): Promise<number> => {
                     resolve(-1);
                 } else {
                     resolve(snap.docs[0].data().weight);
+                }
+            }).catch(error => {
+                reject(() => { throw new Error(error) });
+            });
+    });
+}
+
+/** 直近のFTPを取得 */
+export const getPastFtp = (): Promise<number> => {
+    return new Promise((resolve, reject) => {
+        dbh.collection('users').doc(auth.currentUser?.uid).collection('ftpdata')
+            .where('type', '==', 'ftp').orderBy('date', 'desc').limit(1).get().then(snap => {
+                if (snap.docs.length === 0) {
+                    resolve(-1);
+                } else {
+                    resolve(snap.docs[0].data().ftp);
                 }
             }).catch(error => {
                 reject(() => { throw new Error(error) });
