@@ -2,8 +2,6 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start --config app.dev.json --tunnel",
-    "build:android": "expo build:android -t apk",
-    "build:ios": "expo build:ios -t archive",
     "build:web:prod": "expo build:web",
     "build:web:dev": "expo build:web --config app.dev.json",
     "deploy:web:prod": "firebase deploy",
