@@ -3,13 +3,15 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { Image, StyleSheet, View } from 'react-native';
 
 /** configs */
-import { GoogleAuth, EmailAuth, auth } from '../configs/Firebase';
+import { EmailAuth, GoogleAuth, FacebookAuth, TwitterAuth, auth } from '../configs/Firebase';
 
 const uiConfig = {
     signInFlow: 'popup',
     signInOptions: [
-        GoogleAuth,
         EmailAuth,
+        GoogleAuth,
+        FacebookAuth,
+        TwitterAuth,
     ],
 }
 
