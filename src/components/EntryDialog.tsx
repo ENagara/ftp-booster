@@ -94,7 +94,7 @@ const EntryContainer = ({ action }: EntryContainerProp) => {
             setWeitVisible(false);
             action(true);
         }).catch(error => {
-            setError(() => { throw new Error(error); });
+            setError(error);
         });
     }
 

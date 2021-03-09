@@ -65,7 +65,7 @@ export const entryFtp = (ftpData: FtpDataParam) => {
             .then(no => updateFtpSeq(no))
             .then(no => insertFtpData(no, ftpData))
             .then(() => {
-                resolve();
+                resolve(null);
             })
             .catch(error => {
                 reject(() => { throw new Error(error) });

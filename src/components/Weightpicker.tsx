@@ -43,7 +43,7 @@ const Weightpicker = ({ selectWeight }: Props) => {
             setSelectedWeight([Number(weightArr[0]), 0, Number(decimalStr), 0]);
             selectWeight(pastWeight);
         }).catch(error => {
-            setError(() => { throw new Error(error); });
+            setError(error);
         });
     }, []);
 

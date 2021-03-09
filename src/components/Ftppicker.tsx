@@ -40,7 +40,7 @@ const Ftppicker = ({ selectFtp }: Props) => {
             setSelectedFtp([pastFtp, 0]);
             selectFtp(pastFtp);
         }).catch(error => {
-            setError(() => { throw new Error(error); });
+            setError(error);
         });
     }, []);
 
