@@ -1,18 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { ApplicationProvider, Spinner } from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
 
 /** screens */
-import LoginScreen from './src/screens/LoginScreen';
+import SignInScreen from './src/screens/SignInScreen';
 
 /** components */
 import BottomNavigation from './src/components/BottomNavigation';
 import ErrorBoundary from './src/components/ErrorBoundary';
 
-/** actions */
-import { searchFirestoreUserExists } from './src/actions/UserDataAction';
 
 /** configs */
 import Colors from './src/configs/Colors';
@@ -51,10 +49,9 @@ const App = () => {
  * ログイン状態により、ログイン画面・メインコンテンツを切り替える
  */
 const RenderApp = () => {
-  const [loggingState, setLoggingState] = React.useState<LogingState>(LogingState.Init);
+  const [loggingState, setLoggingState] = useState<LogingState>(LogingState.Init);
   auth.onAuthStateChanged(async (user) => {
-    // Authとfirestoreの両方にユーザ情報が確認できた場合
-    if (user !== null && await searchFirestoreUserExists(user.uid)) {
+    if (user) {
       // ログイン状態
       setLoggingState(LogingState.Logging);
     } else {
@@ -62,6 +59,7 @@ const RenderApp = () => {
       setLoggingState(LogingState.UnLogging);
     }
   });
+
   switch (loggingState) {
     // 読み込み中
     case LogingState.Init:
@@ -75,7 +73,7 @@ const RenderApp = () => {
       return (<BottomNavigation></BottomNavigation>);
     // 未ログイン
     case LogingState.UnLogging:
-      return (<LoginScreen></LoginScreen>);
+      return (<SignInScreen></SignInScreen>);
   }
 }
 
