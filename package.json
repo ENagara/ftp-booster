@@ -26,6 +26,7 @@
     "@react-navigation/bottom-tabs": "^5.11.7",
     "@react-navigation/native": "^5.9.2",
     "@react-navigation/stack": "^5.14.2",
+    "@sentry/browser": "^6.2.1",
     "@ui-kitten/components": "^5.0.0",
     "chart.js": "^2.9.4",
     "expo": "~40.0.0",
@@ -45,8 +46,7 @@
     "react-native-svg": "12.1.0",
     "react-native-vector-icons": "^8.0.0",
     "react-native-web": "~0.13.12",
-    "rmc-picker": "^5.0.10",
-    "sentry-expo": "^3.0.4"
+    "rmc-picker": "^5.0.10"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

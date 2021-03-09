@@ -1,5 +1,5 @@
 import React from "react";
-import * as Sentry from 'sentry-expo';
+import * as Sentry from '@sentry/browser';
 import { StyleSheet, View, Text } from 'react-native';
 import { auth } from '../configs/Firebase';
 
@@ -18,18 +18,15 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 
     componentDidCatch(error: any, errorInfo: any) {
         // Sentryにエラー情報を出力
-
-        // 不具合となっているので一旦コメントアウト
-        // https://github.com/expo/sentry-expo/issues/165
-        /*Sentry.Native.withScope(scope => {
+        Sentry.withScope(scope => {
             scope.setExtras(errorInfo);
             const user = auth.currentUser;
             scope.setUser({
                 username: user?.displayName || 'name undefined',
                 email: user?.email || 'email undefined',
             });
-            Sentry.Native.captureException(error);
-        }); */
+            Sentry.captureException(error);
+        });
         this.setState({
             error: error,
             errorInfo: errorInfo

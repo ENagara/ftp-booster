@@ -1,4 +1,4 @@
-import * as Sentry from 'sentry-expo';
+import * as Sentry from '@sentry/browser';
 import Constants from 'expo-constants';
 
 export const sentryInit = () => {
