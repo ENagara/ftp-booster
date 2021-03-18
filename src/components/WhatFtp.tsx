@@ -31,9 +31,9 @@ const WhatFtp = () => {
         + 'り、前者の方が登坂に有利である。\n\n';
     const endText = '継続的にFTPを記録する上で重要なのは「同じ方式」で測定し'
         + 'たものを記録するということである。方式によっては自身の得意不得意が'
-        + 'あるため、計測値にばらつきが出てしまうためである。こうして計測した'
-        + '値を記録することで自身の成長を確信し、モチベーションアップにつなが'
-        + 'るのではないだろうか。\n\n';
+        + 'あり、計測値にばらつきが出てしまうため。こうして計測した値を記録す'
+        + 'ることで自身の成長を確信し、モチベーションアップにつながるのではな'
+        + 'いだろうか。\n\n';
 
     const openUrl = async (url: string) => {
         const supported = await Linking.canOpenURL(url);
@@ -73,6 +73,7 @@ const WhatFtp = () => {
                     }}>
                     <Text>【パワトレ】パワートレーニング用語集 - Y's Road</Text>
                     <Text>http://www.ysroad.net/shopnews/detail.php?bid=402150</Text>
+                    <Divider />
                     <Text>MAPテストでかんたんにFTPを推定する方法 - じてトレ</Text>
                     <Text>http://www.overlander.co.jp/jitetore/jitetorehint20120108.html</Text>
                 </Hyperlink>
