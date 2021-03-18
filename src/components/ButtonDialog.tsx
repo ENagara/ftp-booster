@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, FC } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button } from '@ui-kitten/components';
 import SimpleDialog from './SimpleDialog';
@@ -10,8 +10,8 @@ type Props = {
     action: (flug: boolean) => void;
 };
 
-const ButtonDialog: React.FC<Props> = ({ buttonName, dialogTitle, dialogOkButtonName, action}: Props) => {
-    const [visible, setVisible] = React.useState<boolean>();
+const ButtonDialog: FC<Props> = ({ buttonName, dialogTitle, dialogOkButtonName, action}: Props) => {
+    const [visible, setVisible] = useState<boolean>();
 
     const toggleDialog = () => setVisible(!visible);
 

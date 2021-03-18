@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import * as Sentry from '@sentry/browser';
 import { StyleSheet, View, Text } from 'react-native';
 import { auth } from '../configs/Firebase';
@@ -10,7 +10,7 @@ interface State {
     errorInfo: any
 }
 
-export default class ErrorBoundary extends React.Component<Props, State> {
+export default class ErrorBoundary extends Component<Props, State> {
     constructor(props: any) {
         super(props);
         this.state = { error: null, errorInfo: null };

@@ -1,29 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { View } from 'react-native';
 import ButtonDialog from '../components/ButtonDialog';
 import { auth } from '../configs/Firebase';
+import { Button } from '@ui-kitten/components';
+type Props = {
+    navigation: any;
+}
+const SettingsScreen = ({ navigation }: Props) => {
+    const [, setError] = useState();
 
-const SettingsScreen = () => {
     const action = (flug: boolean) => {
         // ログアウト処理
         if (flug) {
             auth.signOut()
-                .then(() => {
-                    console.log('ログアウトしました');
-                })
-                .catch(({ message }) => {
-                    console.log(message);
+                .catch(error => {
+                    setError(error);
                 });
         }
     }
-
     return (
-        <ButtonDialog
-            buttonName='ログアウト'
-            dialogTitle='ログアウトしますか？'
-            dialogOkButtonName='ログアウト'
-            action={action}
-        >
-        </ButtonDialog>
+        <View>
+            <Button status='control' onPress={() => navigation.navigate('WhatFTP')}>パワトレ用語について
+            </Button>
+            <ButtonDialog
+                buttonName='ログアウト'
+                dialogTitle='ログアウトしますか？'
+                dialogOkButtonName='ログアウト'
+                action={action}>
+            </ButtonDialog>
+        </View>
     )
 }
+
 export default SettingsScreen;

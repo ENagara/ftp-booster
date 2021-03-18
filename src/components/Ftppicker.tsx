@@ -18,7 +18,7 @@ type Props = {
  * 100～500Wまでの選択
  */
 const Ftppicker = ({ selectFtp }: Props) => {
-    const [, setError] = React.useState();
+    const [, setError] = useState();
     const [selectedFtp, setSelectedFtp] = useState([0, 0, 0, 0]);
     // 選択できるFTP値(100~500)
     const integerList = [...Array(401)].map((v, i) => i + 100);
@@ -35,7 +35,6 @@ const Ftppicker = ({ selectFtp }: Props) => {
             } else {
                 pastFtp = ftp;
             }
-            console.log(pastFtp);
             // 初期体重設定
             setSelectedFtp([pastFtp, 0]);
             selectFtp(pastFtp);

@@ -6,10 +6,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
+/** components */
+import WhatFtp from './WhatFtp';
+
+/** configs */
 import Colors from '../configs/Colors';
 import { BottomTabParamList, FeedParamList, GraphParamList, SettingsParamList } from '../configs/Types';
 
-// 画面
+/** screens */
 import FeedScreen from '../screens/FeedScreen';
 import GraphScreen from '../screens/GraphScreen';
 import SettingsScreen from '../screens/SettingsScreen';
@@ -87,6 +91,11 @@ const SettingsNavigator = () => {
         name='Settings'
         component={SettingsScreen}
         options={ScreenOptions(DISP_SETTINGS)}
+      />
+      <SettingsStack.Screen
+        name="WhatFTP"
+        component={WhatFtp}
+        options={ScreenOptions('パワトレ用語について')}
       />
     </SettingsStack.Navigator>
   );

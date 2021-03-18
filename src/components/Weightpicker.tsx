@@ -18,7 +18,7 @@ type Props = {
  * 20.0～120.9kgまでの選択
  */
 const Weightpicker = ({ selectWeight }: Props) => {
-    const [, setError] = React.useState();
+    const [, setError] = useState();
     const [selectedWeight, setSelectedWeight] = useState([0, 0, 0, 0]);
     // 選択できる体重-整数値(30～150)
     const integerList = [...Array(101)].map((v, i) => i + 20);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { StyleSheet } from 'react-native';
 import { Line } from 'react-chartjs-2';
 
@@ -10,7 +10,7 @@ type LineChartProps = {
     dataLabel: string,
 }
 
-const LineChart: React.FC<LineChartProps> = ({ dispData, dataLabel }: LineChartProps) => {
+const LineChart: FC<LineChartProps> = ({ dispData, dataLabel }: LineChartProps) => {
 
     const data = {
         datasets: [

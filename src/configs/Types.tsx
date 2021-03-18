@@ -24,6 +24,7 @@ export type ColumnsParamList = {
 
 export type SettingsParamList = {
   Settings: undefined;
+  WhatFTP: undefined;
 };
 
 export type FtpDataParam = {

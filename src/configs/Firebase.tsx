@@ -5,8 +5,7 @@ import 'firebase/firestore';
 const firebaseConfig = {
     apiKey: 'apiKey',
     authDomain: 'authDomain',
-    databaseURL: 'databaseURL',
-    projectId: 'ftpbooster',
+    projectId: 'projectId',
     storageBucket: 'storageBucket',
     messagingSenderId: 'messagingSenderId',
     appId: 'appId',

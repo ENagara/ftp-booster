@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect, FC } from 'react';
 import { Layout, Text } from '@ui-kitten/components';
 import { StyleSheet, FlatList } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
@@ -20,18 +20,18 @@ type FeedComponentProps = {
 
 /** フィードコンポーネント */
 const FeedComponent = ({ actionFlug }: FeedComponentProps) => {
-    const [ftpDataList, setFtpDataList] = React.useState<FtpDataParam[]>([]);
+    const [ftpDataList, setFtpDataList] = useState<FtpDataParam[]>([]);
 
-    const [deleteDialogVisible, setDeleteDialogVisible] = React.useState<boolean>();
+    const [deleteDialogVisible, setDeleteDialogVisible] = useState<boolean>();
     const toggleDialog = () => setDeleteDialogVisible(!deleteDialogVisible);
     const getDeleteDialogVisible = () => !!deleteDialogVisible;
 
-    const [deleteItem, setDeleteItem] = React.useState<FtpDataParam>();
+    const [deleteItem, setDeleteItem] = useState<FtpDataParam>();
     const deleteIconPress = (item: FtpDataParam) => {
         toggleDialog();
         setDeleteItem(item);
     }
-    const [, setError] = React.useState();
+    const [, setError] = useState();
 
     /** スクリーンフォーカス時 */
     useFocusEffect(
@@ -48,7 +48,7 @@ const FeedComponent = ({ actionFlug }: FeedComponentProps) => {
      * 一覧データ更新
      * 削除ダイアログを閉じたとき、ftp登録時
      */
-    React.useEffect(() => {
+    useEffect(() => {
         if (!deleteDialogVisible) {
             getFtpDataList().then(data => {
                 setFtpDataList(data);
@@ -200,7 +200,7 @@ type DeleteIconProps = {
     buttonClickAction: (item: FtpDataParam) => void;
     item: FtpDataParam;
 }
-const DeleteItemIcon: React.FC<DeleteIconProps> = ({ item, buttonClickAction }: DeleteIconProps) => {
+const DeleteItemIcon: FC<DeleteIconProps> = ({ item, buttonClickAction }: DeleteIconProps) => {
     if (item.type === 'ftp') {
         return (
             <AntDesign

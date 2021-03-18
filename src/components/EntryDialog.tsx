@@ -71,8 +71,8 @@ const EntryContainer = ({ action }: EntryContainerProp) => {
     const [condition, setCondition] = useState<ConditionParam>(ConditionParam.GOOD);
     const [conditionOption,] = useState<ConditionOption[]>(initConditionOption);
 
-    const [waitVisible, setWeitVisible] = React.useState(false);
-    const [, setError] = React.useState();
+    const [waitVisible, setWeitVisible] = useState(false);
+    const [, setError] = useState();
 
     /** 登録ボタン押下 */
     const entryAction = async () => {

@@ -17,14 +17,14 @@ import { FtpDataParam, DataTypeParam, PointDataParam, GraphState } from '../conf
 
 
 const GraphScreen = () => {
-    const [graphState, setGraphState] = React.useState<GraphState>(GraphState.Loading);
+    const [graphState, setGraphState] = useState<GraphState>(GraphState.Loading);
     const [periodIndex, setPeriodIndex] = useState<number>(1);
     const [dataOptionIndex, setDataOptionIndex] = useState<number>(0);
     const [dataLabel, setDataLabel] = useState<string>('FTP[W]');
     const [dispData, setDispdata] = useState<PointDataParam[]>([]);
     const [orgFtpData, setOrgFtpData] = useState<FtpDataParam[]>([]);
 
-    const [, setError] = React.useState();
+    const [, setError] = useState();
 
     /** 画面フォーカス判定 */
     const isFocused = useIsFocused();
