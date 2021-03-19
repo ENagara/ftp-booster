@@ -47,7 +47,8 @@
     "react-native-svg": "12.1.0",
     "react-native-vector-icons": "^8.0.0",
     "react-native-web": "~0.13.12",
-    "rmc-picker": "^5.0.10"
+    "rmc-picker": "^5.0.10",
+    "xmldom": "^0.5.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
