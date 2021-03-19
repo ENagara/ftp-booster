@@ -7,3 +7,6 @@ npm-debug.*
 *.key
 *.mobileprovision
 *.orig.*
+/debug.log
+/web-build
+/.firebase

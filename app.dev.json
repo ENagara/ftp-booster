@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "ftp-booster",
+    "slug": "ftp-booster",
+    "version": "DEV",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#fc4c02"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nei.ftpbooster",
+      "buildNumber": "DEV"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "android": {
+      "package": "com.nei.ftpbooster",
+      "versionCode": 1
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "ftpbooster",
+            "project": "ftpbooster",
+            "authToken": "YourSentryAuthToken"
+          }
+        }
+      ]
+    },
+    "extra": {
+      "environment": "development"
+    }
+  }
+}
