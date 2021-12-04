@@ -7,7 +7,8 @@ FTP向上のための記録ツール
 準備中
 
 ## Demo
-準備中
+サンプルリンク
+https://ftp-booster-cycling.web.app/
 
 ## Usage
 準備中
